@@ -1,6 +1,8 @@
 import json
 from pprint import pprint
 from time import sleep
+
+import time
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.support.select import Select
@@ -19,7 +21,8 @@ class PricesDriver(object):
     def get_price(self, url):
         titles, data = [], {}
         self.driver.get(url)
-        sleep(30)
+        self.wait_for(self.page_has_loaded)
+        # sleep(30)
 
         text_element = self.driver.find_element_by_xpath("//h4[contains(text(), 'Bare Metal Instances')]/parent::div"
                                                          "/parent::div/parent::div/parent::div/parent::div")
@@ -50,6 +53,18 @@ class PricesDriver(object):
         pprint(data_json)
         self.driver.close()
 
+    def wait_for(self, condition_function):
+        start_time = time.time()
+        while time.time() < start_time + 3:
+            if condition_function():
+                return True
+            else:
+                time.sleep(0.1)
+        raise Exception('Timeout waiting for {}'.format(condition_function.__name__))
+
+    def page_has_loaded(self):
+        page_state = self.driver.execute_script('return document.readyState;')
+        return page_state == 'complete'
 
 if __name__ == "__main__":
     prices_drive = PricesDriver()
