@@ -1,46 +1,100 @@
-import configparser
-import adal
-import os
-import requests
-from azure.mgmt.commerce.models import RateCardQueryParameters
-from msrestazure.azure_active_directory import AADTokenCredentials
+import csv
+import json
+from pprint import pprint
+from selenium import webdriver
+from selenium.webdriver import DesiredCapabilities
+from selenium.webdriver.support.select import Select
+
+from utils import Utils
 
 
-class Prices(object):
+class PricesDriver(object):
 
-    def get_price(self):
-        currency = 'USD'
-        locale = 'en-US'
-        region = 'US'
+    driver = None
 
-        locations = []
-        locations_keys = []
+    def __init__(self):
+        """Initialises the webdriver"""
+        capabilities = DesiredCapabilities.FIREFOX.copy()
+        self.driver = webdriver.Remote(command_executor="http://localhost:4444/wd/hub",
+                                       desired_capabilities=capabilities)
 
-        instances = []
-        instances_keys = []
+    def get_price(self, url):
+        titles, data, localizations = [], {}, []
+        locations, instances, instances_keys = [], [], []
 
-        headers = ['Size', 'Clock speed (ACU/Core)', 'CPU cores;Memory (GiB)', 'Local HDD (GiB)', 'NICs (Max)',
-                   'Network bandwidth']
+        self.driver.get(url)
+        utils = Utils(self.driver)
+        utils.wait_for(utils.page_has_loaded)
 
-        authority_host_uri = 'https://login.microsoftonline.com'
-        tenant = '85bf2e1d-3d45-4132-9d91-c35396e877d4'
-        authority_uri = authority_host_uri + '/' + tenant
-        resource_uri = 'https://management.core.windows.net/'
-        client_id = '34688905-7185-496b-9027-f6e172322810'
+        text_element = self.driver.find_element_by_xpath("//div[@id='vm-tables']")
 
-        context = adal.AuthenticationContext(authority_uri, api_version=None)
-        code = context.acquire_user_code(resource_uri, client_id)
-        print(code['message'])
-        mgmt_token = context.acquire_token_with_device_code(resource_uri, code, client_id)
-        credentials = AADTokenCredentials(mgmt_token, client_id)
+        """ Pegando o select de seleção de localização """
+        options_localization, select_localization = self.get_options_localization(text_element)
 
-        url = "https://management.azure.com:443/subscriptions/2bed4f87-fd56-40e9-9afa-27446d7856d2/providers/Microsoft.Commerce/RateCard?api-version=2016-08-31-preview&$filter=Currency eq '{currencyId}' and Locale eq '{localeId}' and RegionInfo eq '{regionId}'"\
-            .format(currencyId=currency, localeId=locale, regionId=region)
-        json_prices = requests.get(url, allow_redirects=False, headers={'Authorization': 'Bearer {}'.format(credentials.token['access_token'])})
-        print(json_prices)
+        for option_localization in options_localization:
+            data[option_localization.text] = []
+
+            if option_localization.text not in localizations:
+                locations.append({'Name': option_localization.text})
+                localizations.append(option_localization.text)
+
+            """ Selecionando uma opção"""
+            select_localization.select_by_value(option_localization.get_attribute("value"))
+
+            trs = text_element.find_elements_by_tag_name("tr")
+            for tr in trs:
+                tds = tr.find_elements_by_tag_name("td")
+
+                """ Verificando se é td(valores) ou th(titulos) """
+                if len(tds) > 0:
+                    columns, index = {}, 0
+
+                    for td in tds:
+                        text_th = titles[index]
+                        if text_th not in columns:
+                            columns[text_th] = []
+
+                        columns[text_th] = td.text
+                        index += 1
+
+                    data[option_localization.text].append(columns)
+
+                    if columns['INSTANCE'] not in instances_keys:
+                        instances.append(columns)
+                        instances_keys.append(columns['INSTANCE'])
+                    else:
+                        index = instances_keys.index(columns['INSTANCE'])
+                        obj = instances[index]
+                        obj[option_localization.text] = columns['PAY AS YOU GO']
+                else:
+                    ths = tr.find_elements_by_tag_name("th")
+                    for th in ths:
+                        if th.text not in titles:
+                            titles.append(th.text)
+
+        """ Convertendo para JSON e imprimindo na tela """
+        data_json = json.dumps(data, indent=4)
+        pprint(data_json)
+        self.driver.close()
+
+        with open('Azure_Regions.csv', 'w', newline='') as f:  # Just use 'w' mode in 3.x
+            w = csv.DictWriter(f, fieldnames=list(locations[0].keys()), delimiter=';')
+            w.writeheader()
+            w.writerows(locations)
+
+        with open('Azure.csv', 'w', newline='') as f:  # Just use 'w' mode in 3.x
+            w = csv.DictWriter(f, fieldnames=titles + localizations, delimiter=';')
+            w.writeheader()
+            w.writerows(instances)
+
+    def get_options_localization(self, text_element):
+        select_localization_element = text_element.find_element_by_xpath("//select[@id='region-selector']")
+        select_localization = Select(select_localization_element)
+        options_localization = select_localization.options
+        return options_localization, select_localization
 
 
 if __name__ == "__main__":
-    prices = Prices()
-    prices.get_price()
+    prices_drive = PricesDriver()
+    prices_drive.get_price("https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/")
 
