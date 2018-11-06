@@ -18,7 +18,7 @@ class Prices(object):
 
         # url = 'https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/index.json'
         # json_prices = requests.get(url)
-        json_prices = open('aws.json').read()
+        json_prices = open('index.json').read()
 
         all_prices = json.loads(json_prices)
         products = all_prices['products']
@@ -37,6 +37,8 @@ class Prices(object):
                 locations_keys.append(location)
 
             instance_type = product['attributes'].get('instanceType', None)
+            if instance_type is None:
+                continue
 
             if instance_type not in instances_keys:
                 obj = {
@@ -68,15 +70,17 @@ class Prices(object):
 
                 dimensions = offers[offers_keys[0]]['priceDimensions']
                 dimensions_keys = list(dimensions.keys())
+                price = dimensions[dimensions_keys[0]]['pricePerUnit']['USD']
 
-                obj[location] = dimensions[dimensions_keys[0]]['pricePerUnit']['USD']
+                if price != '0.0000000000':
+                    obj[location] = price
 
-        with open('AWS_Regions.csv', 'w') as f:  # Just use 'w' mode in 3.x
+        with open('AWS_Regions.csv', 'w', newline='', encoding='utf-8') as f:  # Just use 'w' mode in 3.x
             w = csv.DictWriter(f, fieldnames=list(locations[0].keys()), delimiter=';')
             w.writeheader()
             w.writerows(locations)
 
-        with open('AWS.csv', 'w') as f:  # Just use 'w' mode in 3.x
+        with open('AWS.csv', 'w', newline='', encoding='utf-8') as f:  # Just use 'w' mode in 3.x
             w = csv.DictWriter(f, fieldnames=headers + locations_keys, delimiter=';')
             w.writeheader()
             w.writerows(instances)
