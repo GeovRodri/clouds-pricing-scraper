@@ -4,7 +4,6 @@ from pprint import pprint
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.support.select import Select
-
 from utils import Utils
 
 
@@ -19,7 +18,8 @@ class PricesDriver(object):
                                        desired_capabilities=capabilities)
 
     def get_price(self, url):
-        titles, data, localizations = [], {}, []
+        headers = ['INSTANCE', 'CORE', 'RAM', 'TEMPORARY STORAGE', 'vCPU', 'ACTIVE vCPU / UNDERLYING vCPU',	'GPU']
+        data, localizations = {}, []
         locations, instances, instances_keys = [], [], []
 
         self.driver.get(url)
@@ -30,6 +30,7 @@ class PricesDriver(object):
 
         """ Pegando o select de seleção de localização """
         options_localization, select_localization = self.get_options_localization(text_element)
+        tables = text_element.find_elements_by_xpath("//table[@class='sd-table']")
 
         for option_localization in options_localization:
             data[option_localization.text] = []
@@ -41,51 +42,62 @@ class PricesDriver(object):
             """ Selecionando uma opção"""
             select_localization.select_by_value(option_localization.get_attribute("value"))
 
-            trs = text_element.find_elements_by_tag_name("tr")
-            for tr in trs:
-                tds = tr.find_elements_by_tag_name("td")
+            for table in tables:
+                titles = []
 
-                """ Verificando se é td(valores) ou th(titulos) """
-                if len(tds) > 0:
-                    columns, index = {}, 0
+                trs = table.find_elements_by_tag_name("tr")
+                for tr in trs:
+                    tds = tr.find_elements_by_tag_name("td")
 
-                    for td in tds:
-                        text_th = titles[index]
-                        if text_th not in columns:
-                            columns[text_th] = []
+                    """ Verificando se é td(valores) ou th(titulos) """
+                    if len(tds) > 0:
+                        columns, index = {}, 0
 
-                        columns[text_th] = td.text
-                        index += 1
+                        for td in tds:
+                            text_th = titles[index]
+                            if text_th not in columns:
+                                columns[text_th] = []
 
-                    data[option_localization.text].append(columns)
+                            columns[text_th] = td.text
+                            index += 1
 
-                    if columns['INSTANCE'] not in instances_keys:
-                        instances.append(columns)
-                        instances_keys.append(columns['INSTANCE'])
+                        data[option_localization.text].append(columns)
+
+                        if columns['INSTANCE'] not in instances_keys:
+                            instances.append(columns)
+                            instances_keys.append(columns['INSTANCE'])
+                            columns[option_localization.text] = columns['PAY AS YOU GO']
+                        else:
+                            index = instances_keys.index(columns['INSTANCE'])
+                            obj = instances[index]
+                            obj[option_localization.text] = columns['PAY AS YOU GO']
                     else:
-                        index = instances_keys.index(columns['INSTANCE'])
-                        obj = instances[index]
-                        obj[option_localization.text] = columns['PAY AS YOU GO']
-                else:
-                    ths = tr.find_elements_by_tag_name("th")
-                    for th in ths:
-                        if th.text not in titles:
-                            titles.append(th.text)
+                        ths = tr.find_elements_by_tag_name("th")
+                        for th in ths:
+                            if th.text not in titles:
+                                titles.append(th.text)
 
         """ Convertendo para JSON e imprimindo na tela """
         data_json = json.dumps(data, indent=4)
         pprint(data_json)
         self.driver.close()
 
-        with open('Azure_Regions.csv', 'w', newline='') as f:  # Just use 'w' mode in 3.x
+        with open('Azure_Regions.csv', 'w', newline='', encoding='utf-8') as f:  # Just use 'w' mode in 3.x
             w = csv.DictWriter(f, fieldnames=list(locations[0].keys()), delimiter=';')
             w.writeheader()
             w.writerows(locations)
 
-        with open('Azure.csv', 'w', newline='') as f:  # Just use 'w' mode in 3.x
-            w = csv.DictWriter(f, fieldnames=titles + localizations, delimiter=';')
+        with open('Azure.csv', 'w', newline='', encoding='utf-8') as f:  # Just use 'w' mode in 3.x
+            headers = headers + localizations
+            w = csv.DictWriter(f, fieldnames=headers, delimiter=';')
             w.writeheader()
-            w.writerows(instances)
+
+            for instance in instances:
+                obj = {}
+                for header in headers:
+                    obj[header] = instance.get(header, '-')
+
+                w.writerow(obj)
 
     def get_options_localization(self, text_element):
         select_localization_element = text_element.find_element_by_xpath("//select[@id='region-selector']")

@@ -1,7 +1,4 @@
 Flask
 selenium
 requests
-adal
 configparser
-azure-mgmt-datalake-analytics
-azure-mgmt
