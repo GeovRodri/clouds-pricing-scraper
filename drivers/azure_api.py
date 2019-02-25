@@ -4,7 +4,7 @@ from pprint import pprint
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.support.select import Select
-from utils import Utils
+from commons.utils import Utils
 
 
 class PricesDriver(object):

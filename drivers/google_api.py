@@ -4,7 +4,7 @@ from pprint import pprint
 from time import sleep
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
-from utils import Utils
+from commons.utils import Utils
 
 
 class PricesDriver(object):
