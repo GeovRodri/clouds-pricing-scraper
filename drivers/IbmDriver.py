@@ -1,29 +1,21 @@
 import json
 from pprint import pprint
 from time import sleep
-
 import time
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.support.select import Select
+from commons.BaseDriver import BaseDriver
 
 
-class PricesDriver(object):
-
-    driver = None
-    capabilities = None
+class IbmDriver(BaseDriver):
 
     def __init__(self):
-        """Initialises the webdriver"""
-        self.capabilities = DesiredCapabilities.FIREFOX.copy()
-        self.driver = webdriver.Remote(command_executor="http://localhost:4444/wd/hub",
-                                       desired_capabilities=self.capabilities)
+        self.url = "https://cloud.oracle.com/iaas/pricing"
+        super().__init__()
 
     def get_price(self, url):
         titles, data = ['processor', 'memory ram', 'hard drives', 'network' 'price', 'price'], {}
-        self.driver.get(url)
-        self.wait_for(self.page_has_loaded)
 
         """ A IBM trabalha com um ifram dentro do site, então antes de fazer tudo tem que pegar esse iframe"""
         frames = self.driver.find_elements_by_tag_name("iframe")
@@ -72,8 +64,6 @@ class PricesDriver(object):
                 pprint(data_json)
                 driver_frame.close()
 
-        self.driver.close()
-
     def get_options_localization(self):
         form_element = self.driver.find_element_by_xpath("//form")
 
@@ -94,9 +84,4 @@ class PricesDriver(object):
     def page_has_loaded(self):
         page_state = self.driver.execute_script('return document.readyState;')
         return page_state == 'complete'
-
-
-if __name__ == "__main__":
-    prices_drive = PricesDriver()
-    prices_drive.get_price("https://cloud.oracle.com/iaas/pricing")
 

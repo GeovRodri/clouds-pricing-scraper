@@ -2,28 +2,18 @@ import csv
 import json
 from pprint import pprint
 from time import sleep
-from selenium import webdriver
-from selenium.webdriver import DesiredCapabilities
-from commons.utils import Utils
+from commons.BaseDriver import BaseDriver
 
 
-class PricesDriver(object):
-
-    driver = None
+class GoogleDriver(BaseDriver):
 
     def __init__(self):
-        """Initialises the webdriver"""
-        capabilities = DesiredCapabilities.FIREFOX.copy()
-        self.driver = webdriver.Remote(command_executor="http://localhost:4444/wd/hub",
-                                       desired_capabilities=capabilities)
+        self.url = "https://cloud.google.com/compute/pricing"
+        super().__init__()
 
-    def get_price(self, url):
+    def get_price(self):
         titles, data = [], {}
         instances, instances_keys = [], []
-
-        self.driver.get(url)
-        utils = Utils(self.driver)
-        utils.wait_for(utils.page_has_loaded)
 
         tables = self.driver.find_elements_by_xpath("//table//th[contains(text(),'Tipo de máquina')]/../../..")
 
@@ -91,7 +81,6 @@ class PricesDriver(object):
         """ Convertendo para JSON e imprimindo na tela """
         data_json = json.dumps(data, indent=4)
         pprint(data_json)
-        self.driver.close()
 
         with open('Google_Regions.csv', 'w', newline='', encoding='utf-8') as f:  # Just use 'w' mode in 3.x
             w = csv.DictWriter(f, fieldnames=list(locations[0].keys()), delimiter=';')
@@ -120,8 +109,3 @@ class PricesDriver(object):
                 options_name.append({'Name': option.text})
 
         return options, options_name
-
-
-if __name__ == "__main__":
-    prices_drive = PricesDriver()
-    prices_drive.get_price("https://cloud.google.com/compute/pricing")

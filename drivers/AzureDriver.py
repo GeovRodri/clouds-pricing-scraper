@@ -1,30 +1,20 @@
 import csv
 import json
 from pprint import pprint
-from selenium import webdriver
-from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.support.select import Select
-from commons.utils import Utils
+from commons.BaseDriver import BaseDriver
 
 
-class PricesDriver(object):
-
-    driver = None
+class AzureDriver(BaseDriver):
 
     def __init__(self):
-        """Initialises the webdriver"""
-        capabilities = DesiredCapabilities.FIREFOX.copy()
-        self.driver = webdriver.Remote(command_executor="http://localhost:4444/wd/hub",
-                                       desired_capabilities=capabilities)
+        self.url = "https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/"
+        super().__init__()
 
-    def get_price(self, url):
+    def get_price(self):
         headers = ['INSTANCE', 'CORE', 'RAM', 'TEMPORARY STORAGE', 'vCPU', 'ACTIVE vCPU / UNDERLYING vCPU',	'GPU']
         data, localizations = {}, []
         locations, instances, instances_keys = [], [], []
-
-        self.driver.get(url)
-        utils = Utils(self.driver)
-        utils.wait_for(utils.page_has_loaded)
 
         text_element = self.driver.find_element_by_xpath("//div[@id='vm-tables']")
 
@@ -80,7 +70,6 @@ class PricesDriver(object):
         """ Convertendo para JSON e imprimindo na tela """
         data_json = json.dumps(data, indent=4)
         pprint(data_json)
-        self.driver.close()
 
         with open('Azure_Regions.csv', 'w', newline='', encoding='utf-8') as f:  # Just use 'w' mode in 3.x
             w = csv.DictWriter(f, fieldnames=list(locations[0].keys()), delimiter=';')
@@ -104,9 +93,3 @@ class PricesDriver(object):
         select_localization = Select(select_localization_element)
         options_localization = select_localization.options
         return options_localization, select_localization
-
-
-if __name__ == "__main__":
-    prices_drive = PricesDriver()
-    prices_drive.get_price("https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/")
-

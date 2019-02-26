@@ -1,9 +1,10 @@
 import csv
 import json
 import requests
+from commons.BaseDriver import BaseDriver
 
 
-class Prices(object):
+class AwsDriver(BaseDriver):
 
     def get_price(self):
         locations = []
@@ -84,9 +85,3 @@ class Prices(object):
             w = csv.DictWriter(f, fieldnames=headers + locations_keys, delimiter=';')
             w.writeheader()
             w.writerows(instances)
-
-
-if __name__ == "__main__":
-    prices = Prices()
-    prices.get_price()
-
