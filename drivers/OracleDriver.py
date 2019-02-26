@@ -1,6 +1,3 @@
-import json
-import time
-from pprint import pprint
 from commons.BaseDriver import BaseDriver
 
 
@@ -37,6 +34,4 @@ class OracleDriver(BaseDriver):
             else:
                 data["default"].append(columns)
 
-        """ Convertendo para JSON e imprimindo na tela """
-        data_json = json.dumps(data, indent=4)
-        pprint(data_json)
+        self.save_json('oracle', data)

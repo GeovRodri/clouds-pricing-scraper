@@ -1,6 +1,3 @@
-import csv
-import json
-from pprint import pprint
 from selenium.webdriver.support.select import Select
 from commons.BaseDriver import BaseDriver
 
@@ -67,26 +64,7 @@ class AzureDriver(BaseDriver):
                             if th.text not in titles:
                                 titles.append(th.text)
 
-        """ Convertendo para JSON e imprimindo na tela """
-        data_json = json.dumps(data, indent=4)
-        pprint(data_json)
-
-        with open('Azure_Regions.csv', 'w', newline='', encoding='utf-8') as f:  # Just use 'w' mode in 3.x
-            w = csv.DictWriter(f, fieldnames=list(locations[0].keys()), delimiter=';')
-            w.writeheader()
-            w.writerows(locations)
-
-        with open('Azure.csv', 'w', newline='', encoding='utf-8') as f:  # Just use 'w' mode in 3.x
-            headers = headers + localizations
-            w = csv.DictWriter(f, fieldnames=headers, delimiter=';')
-            w.writeheader()
-
-            for instance in instances:
-                obj = {}
-                for header in headers:
-                    obj[header] = instance.get(header, '-')
-
-                w.writerow(obj)
+        self.save_json('oracle', instances)
 
     def get_options_localization(self, text_element):
         select_localization_element = text_element.find_element_by_xpath("//select[@id='region-selector']")

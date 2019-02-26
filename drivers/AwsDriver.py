@@ -76,12 +76,4 @@ class AwsDriver(BaseDriver):
                 if price != '0.0000000000':
                     obj[location] = price
 
-        with open('AWS_Regions.csv', 'w', newline='', encoding='utf-8') as f:  # Just use 'w' mode in 3.x
-            w = csv.DictWriter(f, fieldnames=list(locations[0].keys()), delimiter=';')
-            w.writeheader()
-            w.writerows(locations)
-
-        with open('AWS.csv', 'w', newline='', encoding='utf-8') as f:  # Just use 'w' mode in 3.x
-            w = csv.DictWriter(f, fieldnames=headers + locations_keys, delimiter=';')
-            w.writeheader()
-            w.writerows(instances)
+        self.save_json('oracle', instances)
