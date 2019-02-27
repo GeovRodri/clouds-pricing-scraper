@@ -26,7 +26,7 @@ class BaseDriver:
         """ Buscando tabelas na página de possuem valor ($) """
         self.tables = self.driver.find_elements_by_xpath('//table//td[starts-with(., "$")]/../../..')
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __del__(self):
         self.driver.close()
 
     def save_json(self, name, data):

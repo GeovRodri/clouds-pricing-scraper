@@ -12,14 +12,12 @@ class GoogleDriver(BaseDriver):
         super().__init__()
 
     def get_price(self):
-        titles, data = [], {}
-        instances, instances_keys = [], []
+        titles, columns = [], {}
 
         """ Pegando o select de seleção de localização """
         localizations = self.get_options_localization()
 
         for localization in localizations:
-            data[localization] = []
             self.select_option(localization)
 
             for table in self.tables:
@@ -36,39 +34,35 @@ class GoogleDriver(BaseDriver):
 
                         continue
 
-                    columns, index = {}, 0
+                    index = 0
                     for td in tds:
                         text_th = titles[index]
+                        key = None
+
+                        if index == 0:
+                            key = td.text
+
+                        if key not in columns:
+                            columns[key] = {}
 
                         """ Se for um valor agrupar em princing, se não só adicionar como uma coluna """
                         if str(td.text).startswith('$'):
-                            if 'pricing' not in columns:
-                                columns['pricing'] = {}
+                            if 'pricing' not in columns[key]:
+                                columns[key]['pricing'] = {}
 
-                            if localization not in columns['pricing']:
-                                columns['pricing'][localization] = {}
+                            if localization not in columns[key]['pricing']:
+                                columns[key]['pricing'][localization] = {}
 
-                            columns['pricing'][localization][text_th] = td.text
+                            columns[key]['pricing'][localization][text_th] = td.text
                         else:
-                            if text_th not in columns:
-                                columns[text_th] = {}
+                            if text_th not in columns[key]:
+                                columns[key][text_th] = {}
 
-                            columns[text_th] = td.text
+                            columns[key][text_th] = td.text
 
                         index += 1
 
-                    data[localization].append(columns)
-
-                    if columns['Tipo de máquina'] not in instances_keys:
-                        columns[localization] = columns['Preço (US$)']
-                        instances.append(columns)
-                        instances_keys.append(columns['Tipo de máquina'])
-                    else:
-                        index = instances_keys.index(columns['Tipo de máquina'])
-                        obj = instances[index]
-                        obj[localization] = columns['Preço (US$)']
-
-        self.save_json('google', data)
+        self.save_json('google', columns)
 
     def select_option(self, localization):
         """ Selecionando uma opção"""
@@ -81,7 +75,7 @@ class GoogleDriver(BaseDriver):
 
     def get_options_localization(self):
         options = []
-        options_page = self.driver.find_elements_by_tag_name("md-option")
+        options_page = self.driver.find_elements_by_class_name("md-text")
         for option in options_page:
             if option.text not in options and len(option.text) > 0:
                 options.append(option.text)
