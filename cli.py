@@ -28,7 +28,7 @@ def main():
     elif args.cloud == 'oracle':
         prices_drive = OracleDriver()
 
-    prices_drive.get_price()
+    prices_drive.get()
 
 
 if __name__ == '__main__':
