@@ -1,6 +1,3 @@
-import csv
-import json
-from pprint import pprint
 from time import sleep
 from commons.BaseDriver import BaseDriver
 
@@ -34,12 +31,11 @@ class GoogleDriver(BaseDriver):
 
                         continue
 
-                    index = 0
+                    index, key = 0, None
                     for td in tds:
                         text_th = titles[index]
-                        key = None
 
-                        if index == 0:
+                        if key is None:
                             key = td.text
 
                         if key not in columns:
@@ -75,9 +71,10 @@ class GoogleDriver(BaseDriver):
 
     def get_options_localization(self):
         options = []
-        options_page = self.driver.find_elements_by_class_name("md-text")
+        options_page = self.driver.find_elements_by_xpath("//md-option//div[@class='md-text']")
         for option in options_page:
-            if option.text not in options and len(option.text) > 0:
-                options.append(option.text)
+            text = option.get_attribute('textContent')
+            if text not in options and len(text) > 0:
+                options.append(text)
 
         return options
