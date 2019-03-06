@@ -6,6 +6,7 @@ class GoogleDriver(BaseDriver):
 
     def __init__(self):
         self.url = "https://cloud.google.com/compute/pricing"
+        self.name_file = 'google'
         super().__init__()
 
     def select_option(self, localization):

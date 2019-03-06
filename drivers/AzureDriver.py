@@ -6,6 +6,7 @@ class AzureDriver(BaseDriver):
 
     def __init__(self):
         self.url = "https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/"
+        self.name_file = 'azure'
         super().__init__()
 
     def select_option(self, localization):

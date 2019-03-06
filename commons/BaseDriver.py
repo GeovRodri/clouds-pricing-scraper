@@ -10,6 +10,7 @@ from commons.Utils import Utils
 class BaseDriver:
 
     url = ''
+    name_file = 'default'
     driver = None
     tables = None
     columns = {}
@@ -82,7 +83,7 @@ class BaseDriver:
 
                         index += 1
 
-        self.save_json('google')
+        self.save_json(self.name_file)
 
     def select_option(self, localization):
         raise NotImplementedError()
