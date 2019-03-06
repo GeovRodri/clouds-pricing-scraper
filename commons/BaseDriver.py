@@ -26,7 +26,8 @@ class BaseDriver:
         utils.wait_for(utils.page_has_loaded)
 
         """ Buscando tabelas na página de possuem valor ($) """
-        self.tables = self.driver.find_elements_by_xpath('//table//td[starts-with(., "$")]/../../..')
+        self.tables = self.driver.find_elements_by_xpath(
+            '//table//td[starts-with(descendant::*/text(), "$") or starts-with(text(), "$")]/../../..')
 
     def __del__(self):
         self.driver.close()
