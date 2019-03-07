@@ -1,6 +1,4 @@
 import json
-from pprint import pprint
-
 import os
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
@@ -25,9 +23,10 @@ class BaseDriver:
         utils = Utils(self.driver)
         utils.wait_for(utils.page_has_loaded)
 
-        """ Buscando tabelas na página de possuem valor ($) """
-        self.tables = self.driver.find_elements_by_xpath(
-            '//table//td[starts-with(descendant::*/text(), "$") or starts-with(text(), "$")]/../../..')
+        """ Buscando tabelas na página de possuem valor ($). O while é para garantir o retorno dos dados """
+        while self.tables is None:
+            self.tables = self.driver.find_elements_by_xpath(
+                '//table//td[starts-with(descendant::*/text(), "$") or starts-with(text(), "$")]/../../..')
 
     def __del__(self):
         self.driver.close()
@@ -44,20 +43,23 @@ class BaseDriver:
             self.select_option(localization)
 
             for table in self.tables:
-                trs = table.find_elements_by_tag_name("tr")
-                for tr in trs:
+                thead = table.find_element_by_tag_name("thead")
+                tbody = table.find_element_by_tag_name("tbody")
+
+                """ Buscando as colunas. Tem sites que utilizam o td no lugar do th """
+                ths = thead.find_elements_by_tag_name("th")
+                if len(ths) <= 0:
+                    ths = thead.find_elements_by_tag_name("td")
+
+                for th in ths:
+                    if th.text not in titles:
+                        titles.append(th.text)
+
+                trs_body = tbody.find_elements_by_tag_name("tr")
+                for tr in trs_body:
                     tds = tr.find_elements_by_tag_name("td")
-
-                    """ Verificando se é titulo """
-                    if len(tds) <= 0:
-                        ths = tr.find_elements_by_tag_name("th")
-                        for th in ths:
-                            if th.text not in titles:
-                                titles.append(th.text)
-
-                        continue
-
                     index, key = 0, None
+
                     for td in tds:
                         text_th = titles[index]
 
