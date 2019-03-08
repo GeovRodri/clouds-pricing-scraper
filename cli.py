@@ -1,10 +1,8 @@
 import argparse
-
+from drivers.AlibabaDriver import AlibabaDriver
 from drivers.AwsDriver import AwsDriver
 from drivers.AzureDriver import AzureDriver
-from drivers.CtlDriver import CtlDriver
 from drivers.GoogleDriver import GoogleDriver
-from drivers.IbmDriver import IbmDriver
 from drivers.OracleDriver import OracleDriver
 
 
@@ -19,12 +17,10 @@ def main():
         prices_drive = AwsDriver()
     elif args.cloud == 'azure':
         prices_drive = AzureDriver()
-    elif args.cloud == 'ctl':
-        prices_drive = CtlDriver()
     elif args.cloud == 'google':
         prices_drive = GoogleDriver()
-    elif args.cloud == 'ibm':
-        prices_drive = IbmDriver()
+    elif args.cloud == 'alibaba':
+        prices_drive = AlibabaDriver()
     elif args.cloud == 'oracle':
         prices_drive = OracleDriver()
 
