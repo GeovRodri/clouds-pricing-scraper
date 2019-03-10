@@ -1,25 +1,39 @@
+from selenium import webdriver
+from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.support.select import Select
 from commons.BaseDriver import BaseDriver
+from commons.Utils import Utils
 
 
 class AlibabaDriver(BaseDriver):
 
     def __init__(self):
-        self.url = "https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/"
+        self.url = "https://www.alibabacloud.com/product/ecs"
         self.name_file = 'azure'
+
+        """Initialises the webdriver"""
+        capabilities = DesiredCapabilities.FIREFOX.copy()
+        self.driver = webdriver.Remote(command_executor="http://localhost:4444/wd/hub",
+                                       desired_capabilities=capabilities)
+
+        self.driver.get(self.url)
+        utils = Utils(self.driver)
+        utils.wait_for(utils.page_has_loaded)
+
         super().__init__()
 
+    def search(self):
+        localizations = self.get_localizations()
+        print(localizations)
+
     def select_option(self, localization):
-        """ Selecionando uma opção"""
-        select_localization_element = Select(self.driver.find_element_by_xpath("//select[@id='region-selector']"))
-        select_localization_element.select_by_visible_text(localization)
+        raise NotImplementedError()
 
     def get_localizations(self):
         options = []
-        select_localization_element = self.driver.find_element_by_xpath("//select[@id='region-selector']")
-        select_localization = Select(select_localization_element)
+        elements = self.driver.find_element_by_xpath("//*[contains(@class,'get-regions')]//dd")
 
-        for option in select_localization.options:
-            options.append(option.text)
+        for element in elements:
+            options.append(element.text())
 
         return options

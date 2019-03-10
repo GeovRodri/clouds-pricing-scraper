@@ -12,7 +12,7 @@ class AwsDriver(BaseDriver):
 
     def search(self):
         json_prices = requests.get(self.url)
-        all_prices = json.loads(json_prices)
+        all_prices = json.loads(json_prices.json())
         products = all_prices['products']
         on_demand = all_prices['terms']['OnDemand']
 
