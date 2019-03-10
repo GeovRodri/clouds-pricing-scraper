@@ -1,7 +1,7 @@
-from commons.BaseDriver import BaseDriver
+from commons.BaseSeleniumDriver import BaseSeleniumDriver
 
 
-class OracleDriver(BaseDriver):
+class OracleDriver(BaseSeleniumDriver):
 
     def __init__(self):
         self.url = 'https://cloud.oracle.com/iaas/pricing'

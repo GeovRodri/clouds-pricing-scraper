@@ -1,4 +1,3 @@
-import csv
 import json
 import requests
 from commons.BaseDriver import BaseDriver
@@ -6,66 +5,35 @@ from commons.BaseDriver import BaseDriver
 
 class AwsDriver(BaseDriver):
 
-    def get_price(self):
-        locations = []
-        locations_keys = []
+    def __init__(self):
+        self.url = "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/index.json"
+        self.name_file = 'aws'
+        super().__init__()
 
-        instances = []
-        instances_keys = []
-
-        headers = ['Instance Type', 'GPUs', 'vCPU', 'Memory (GiB)', 'Storage (GB)','Networking Performance',
-                   'Physical Processor', 'Clock Speed (GHz)', 'Intel AVX', 'Intel AVX2', 'Intel Turbo', 'EBS OPT',
-                   'Enhanced Network']
-
-        # url = 'https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/index.json'
-        # json_prices = requests.get(url)
-        json_prices = open('index.json').read()
-
+    def search(self):
+        json_prices = requests.get(self.url)
         all_prices = json.loads(json_prices)
         products = all_prices['products']
         on_demand = all_prices['terms']['OnDemand']
 
         for product_key in products:
             product = products[product_key]
-
             sku = product['sku']
             location = product['attributes'].get('location', None)
-            if location is None:
-                continue
-
-            if location not in locations_keys:
-                locations.append({'Name': location})
-                locations_keys.append(location)
 
             instance_type = product['attributes'].get('instanceType', None)
             if instance_type is None:
                 continue
 
-            if instance_type not in instances_keys:
-                obj = {
-                    'Instance Type': product['attributes'].get('instanceType', None),
-                    'GPUs': instance_type,
-                    'vCPU': product['attributes'].get('vcpu', None),
-                    'Memory (GiB)': product['attributes'].get('memory', None),
-                    'Storage (GB)': product['attributes'].get('storage', None),
-                    'Networking Performance': product['attributes'].get('networkPerformance', None),
-                    'Physical Processor': product['attributes'].get('physicalProcessor', None),
-                    'Clock Speed (GHz)': product['attributes'].get('clockSpeed', None),
-                    'Intel AVX': product['attributes'].get('intelAvxAvailable', '-'),
-                    'Intel AVX2': product['attributes'].get('intelAvx2Available', '-'),
-                    'Intel Turbo': product['attributes'].get('intelTurboAvailable', '-'),
-                    'EBS OPT': product['attributes'].get('ebsOptimized', '-'),
-                    'Enhanced Network': product['attributes'].get('enhancedNetworkingSupported', '-')
-                }
+            if instance_type not in self.columns:
+                self.columns[instance_type] = product['attributes']
+                """ Removendo campos de localização """
+                del self.columns[instance_type]['location']
+                del self.columns[instance_type]['locationType']
+                self.columns[instance_type]['pricing'] = {}
 
-                instances.append(obj)
-                instances_keys.append(instance_type)
-            else:
-                index = instances_keys.index(instance_type)
-                obj = instances[index]
-
+            """ Pegando os valores do produto """
             offers = on_demand.get(sku, None)
-
             if offers is not None:
                 offers_keys = list(offers.keys())
 
@@ -74,6 +42,4 @@ class AwsDriver(BaseDriver):
                 price = dimensions[dimensions_keys[0]]['pricePerUnit']['USD']
 
                 if price != '0.0000000000':
-                    obj[location] = price
-
-        self.save_json('oracle', instances)
+                    self.columns[instance_type]['pricing'][location] = price

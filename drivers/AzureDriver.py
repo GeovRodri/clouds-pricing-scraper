@@ -1,8 +1,8 @@
 from selenium.webdriver.support.select import Select
-from commons.BaseDriver import BaseDriver
+from commons.BaseSeleniumDriver import BaseSeleniumDriver
 
 
-class AzureDriver(BaseDriver):
+class AzureDriver(BaseSeleniumDriver):
 
     def __init__(self):
         self.url = "https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/"

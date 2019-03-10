@@ -1,8 +1,8 @@
 from time import sleep
-from commons.BaseDriver import BaseDriver
+from commons.BaseSeleniumDriver import BaseSeleniumDriver
 
 
-class GoogleDriver(BaseDriver):
+class GoogleDriver(BaseSeleniumDriver):
 
     def __init__(self):
         self.url = "https://cloud.google.com/compute/pricing"
