@@ -29,7 +29,8 @@ class AlibabaDriver(BaseDriver):
         localizations = self.get_localizations()
 
         for localization in localizations:
-            cards = self.driver.find_elements_by_xpath("//*[contains(@class, 'products')]//div[contains(@class, 'box')]")
+            xpath_products = "//*[contains(@class, 'products')]//div[contains(@class, 'box')]"
+            cards = self.driver.find_elements_by_xpath(xpath_products)
             self.select_option(localization)
 
             for card in cards:
@@ -58,7 +59,8 @@ class AlibabaDriver(BaseDriver):
                 self.columns[key]['pricing'][localization]['price'] = price
 
     def select_option(self, localization):
-        self.driver.execute_script("$(\".get-regions a:contains('{}')\")[0].click()".format(localization))
+        select = self.driver.find_element_by_xpath('//a[contains(text(),"{}")]'.format(localization))
+        select.click()
 
     def get_localizations(self):
         options = []
