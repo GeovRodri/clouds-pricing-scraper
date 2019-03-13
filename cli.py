@@ -8,23 +8,28 @@ from drivers.OracleDriver import OracleDriver
 
 def main():
     parser = argparse.ArgumentParser()
-    prices_drive = None
-
     parser.add_argument("cloud", help='Digite a cloud desejada', type=str)
 
     args = parser.parse_args()
-    if args.cloud == 'aws':
+    if args.cloud is None or args.cloud == 'aws':
         prices_drive = AwsDriver()
-    elif args.cloud == 'azure':
-        prices_drive = AzureDriver()
-    elif args.cloud == 'google':
-        prices_drive = GoogleDriver()
-    elif args.cloud == 'alibaba':
-        prices_drive = AlibabaDriver()
-    elif args.cloud == 'oracle':
-        prices_drive = OracleDriver()
+        prices_drive.get()
 
-    prices_drive.get()
+    if args.cloud is None or args.cloud == 'azure':
+        prices_drive = AzureDriver()
+        prices_drive.get()
+
+    if args.cloud is None or args.cloud == 'google':
+        prices_drive = GoogleDriver()
+        prices_drive.get()
+
+    if args.cloud is None or args.cloud == 'alibaba':
+        prices_drive = AlibabaDriver()
+        prices_drive.get()
+
+    if args.cloud is None or args.cloud == 'oracle':
+        prices_drive = OracleDriver()
+        prices_drive.get()
 
 
 if __name__ == '__main__':
