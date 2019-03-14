@@ -1,7 +1,8 @@
-from time import sleep
-
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.expected_conditions import presence_of_all_elements_located
+from selenium.webdriver.support.wait import WebDriverWait
 from commons.BaseDriver import BaseDriver
 from commons.Utils import Utils
 
@@ -27,36 +28,42 @@ class AlibabaDriver(BaseDriver):
 
     def search(self):
         localizations = self.get_localizations()
+        xpath_products = "//*[contains(@class, 'reseller-band-color')]//div[contains(@class, 'box')]"
+        cards = self.driver.find_elements_by_xpath(xpath_products)
+        products_os = self.get_os()
 
-        for localization in localizations:
-            xpath_products = "//*[contains(@class, 'products')]//div[contains(@class, 'box')]"
-            cards = self.driver.find_elements_by_xpath(xpath_products)
-            self.select_option(localization)
+        for product_os in products_os:
+            self.select_option(product_os)
 
-            for card in cards:
-                price = card.find_element_by_xpath("//*[contains(@class, 'price')]").text
-                """ considerando a key como price """
-                key = price
-                items = card.find_elements_by_tag_name("li")
+            for localization in localizations:
+                self.select_option(localization)
+                index_card = 1
 
-                if key not in self.columns:
-                    self.columns[key] = {}
+                for card in cards:
+                    card_xpath = xpath_products + '[{}]'.format(index_card)
+                    price = self.driver.find_element_by_xpath(card_xpath + "//*[contains(@class, 'price')]").text
+                    items = self.driver.find_elements_by_xpath(card_xpath + "//li")
+                    key = "{}_{}".format(index_card, product_os)
 
-                for item in items:
-                    """ Pegando o titulo e a valor, como os dois estão juntos estou considerando o que está em negrito
-                     é o valor e o restante o titulo"""
-                    value = item.find_element_by_tag_name('b').text
-                    title = str(item.text).replace(value, '')
-                    self.columns[key][title] = value
+                    if key not in self.columns:
+                        self.columns[key] = {}
 
-                """ Pegando os valores dos produtos"""
-                if 'pricing' not in self.columns[key]:
-                    self.columns[key]['pricing'] = {}
+                    for item in items:
+                        """ Pegando o titulo e a valor, como os dois estão juntos estou considerando o que está em negrito
+                         é o valor e o restante o titulo"""
+                        value = item.find_element_by_tag_name('b').text
+                        title = str(item.text).replace(value, '')
+                        self.columns[key][title] = value
 
-                if localization not in self.columns[key]['pricing']:
-                    self.columns[key]['pricing'][localization] = {}
+                    """ Pegando os valores dos produtos"""
+                    if 'pricing' not in self.columns[key]:
+                        self.columns[key]['pricing'] = {}
 
-                self.columns[key]['pricing'][localization]['price'] = price
+                    if localization not in self.columns[key]['pricing']:
+                        self.columns[key]['pricing'][localization] = {}
+
+                    self.columns[key]['pricing'][localization]['price'] = price
+                    index_card += 1
 
     def select_option(self, localization):
         select = self.driver.find_element_by_xpath('//a[contains(text(),"{}")]'.format(localization))
@@ -65,6 +72,15 @@ class AlibabaDriver(BaseDriver):
     def get_localizations(self):
         options = []
         selects = self.driver.find_elements_by_xpath("//*[contains(@class,'get-regions')]//dd")
+
+        for element in selects:
+            options.append(element.text)
+
+        return options
+
+    def get_os(self):
+        options = []
+        selects = self.driver.find_elements_by_xpath("//*[contains(@class,'get-os')]//dd")
 
         for element in selects:
             options.append(element.text)
