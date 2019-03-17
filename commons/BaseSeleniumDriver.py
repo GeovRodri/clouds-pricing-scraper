@@ -7,10 +7,9 @@ from commons.Utils import Utils
 class BaseSeleniumDriver(BaseDriver):
 
     url = ''
-    name_file = 'default'
+    collection_name = 'default'
     driver = None
     tables = None
-    columns = {}
 
     def __init__(self):
         """Initialises the webdriver"""
@@ -23,9 +22,11 @@ class BaseSeleniumDriver(BaseDriver):
         utils.wait_for(utils.page_has_loaded)
 
         """ Buscando tabelas na página de possuem valor ($). O while é para garantir o retorno dos dados """
-        while self.tables is None:
+        while self.tables is None or len(self.tables) == 0:
             self.tables = self.driver.find_elements_by_xpath(
                 '//table//td[starts-with(descendant::*/text(), "$") or starts-with(text(), "$")]/../../..')
+
+        super().__init__()
 
     def __del__(self):
         self.driver.close()

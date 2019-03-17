@@ -1,8 +1,5 @@
 import ijson
 from urllib.request import urlopen
-
-from dotty_dict import dotty
-
 from commons.BaseDriver import BaseDriver
 
 
@@ -10,7 +7,7 @@ class AwsDriver(BaseDriver):
 
     def __init__(self):
         self.url = "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/index.json"
-        self.name_file = 'aws'
+        self.collection_name = 'aws'
         super().__init__()
 
     def search(self):

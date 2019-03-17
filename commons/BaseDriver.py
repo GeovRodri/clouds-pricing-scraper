@@ -1,5 +1,8 @@
+import datetime
 import json
 import os
+
+from pymongo import MongoClient
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
 from commons.Utils import Utils
@@ -8,9 +11,15 @@ from commons.Utils import Utils
 class BaseDriver:
 
     url = ''
-    name_file = 'default'
+    collection_name = 'default'
     tables = None
     columns = {}
+    collection_database = None
+
+    def __init__(self):
+        client = MongoClient('localhost', 27017)
+        database = client['clouds-price']
+        self.collection_database = database[self.collection_name]
 
     def get(self):
         self.search()
@@ -20,10 +29,5 @@ class BaseDriver:
         raise NotImplementedError()
 
     def save_json(self):
-        """ Convertendo para JSON e imprimindo na tela """
-        data_json = json.dumps(self.columns, indent=4)
-        path_file = 'results/' + self.name_file
-
-        os.makedirs(os.path.dirname(path_file), exist_ok=True)
-        with open(path_file, 'w', newline='', encoding='utf-8') as f:
-            f.write(data_json)
+        self.columns['_id'] = datetime.datetime.now()
+        self.collection_database.insert(self.columns, check_keys=False)

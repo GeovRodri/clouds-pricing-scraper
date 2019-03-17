@@ -5,7 +5,7 @@ class OracleDriver(BaseSeleniumDriver):
 
     def __init__(self):
         self.url = 'https://cloud.oracle.com/iaas/pricing'
-        self.name_file = 'oracle'
+        self.collection_name = 'oracle'
         super().__init__()
 
     def select_option(self, localization):

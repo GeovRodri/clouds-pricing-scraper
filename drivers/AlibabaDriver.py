@@ -1,8 +1,5 @@
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.expected_conditions import presence_of_all_elements_located
-from selenium.webdriver.support.wait import WebDriverWait
 from commons.BaseDriver import BaseDriver
 from commons.Utils import Utils
 
@@ -11,7 +8,7 @@ class AlibabaDriver(BaseDriver):
 
     def __init__(self):
         self.url = "https://www.alibabacloud.com/product/ecs"
-        self.name_file = 'alibaba'
+        self.collection_name = 'alibaba'
 
         """Initialises the webdriver"""
         capabilities = DesiredCapabilities.FIREFOX.copy()
