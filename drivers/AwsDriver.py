@@ -1,6 +1,7 @@
+import ijson
 from urllib.request import urlopen
 
-import ijson
+from dotty_dict import dotty
 
 from commons.BaseDriver import BaseDriver
 
@@ -13,38 +14,42 @@ class AwsDriver(BaseDriver):
         super().__init__()
 
     def search(self):
-        f = urlopen(self.url)
-        products_pages = ijson.items(f, 'products')
-        on_demand_pages = ijson.basic_parse(f, 'terms.OnDemand')
+        response = urlopen(self.url)
+        pages = ijson.parse(response)
+        sku_location = {}
 
-        for products in products_pages:
-            for product_key in products:
-                product = products[product_key]
-                sku = product['sku']
-                location = product['attributes'].get('location', None)
+        location = None
+        instance_type = None
+        sku = None
 
-                instance_type = product['attributes'].get('instanceType', None)
-                if instance_type is None:
-                    continue
+        for prefix, event, value in pages:
+            if prefix == '':
+                continue
 
-                if instance_type not in self.columns:
-                    self.columns[instance_type] = product['attributes']
-                    """ Removendo campos de localização """
-                    del self.columns[instance_type]['location']
-                    del self.columns[instance_type]['locationType']
+            if 'products' in prefix and event == 'string':
+                if 'location' in prefix:
+                    location = value
+                elif 'instanceType' in prefix:
+                    instance_type = value
+                    self.columns[instance_type] = {}
                     self.columns[instance_type]['pricing'] = {}
+                elif 'sku' in prefix:
+                    sku = value
 
-                """ Pegando os valores do produto """
-                offers = None
-                for on_demand in on_demand_pages:
-                    on_demand.get(sku, None)
+                if sku is not None and location is not None and instance_type is not None:
+                    sku_location[sku] = {'location': location, 'instance_type': instance_type}
 
-                if offers is not None:
-                    offers_keys = list(offers.keys())
+                    if 'attributes' in prefix and 'location' not in prefix and 'instanceType' not in prefix:
+                        prefix_keys = prefix.split('.')
+                        self.columns[instance_type][prefix_keys[(len(prefix_keys) - 1)]] = value
 
-                    dimensions = offers[offers_keys[0]]['priceDimensions']
-                    dimensions_keys = list(dimensions.keys())
-                    price = dimensions[dimensions_keys[0]]['pricePerUnit']['USD']
+            elif 'terms.OnDemand' in prefix and event == 'string':
+                prefix_keys = prefix.split('.')
+                index_on_demand = prefix_keys.index('OnDemand')
+                offer_key = prefix_keys[(index_on_demand + 1)]
 
-                    if price != '0.0000000000':
-                        self.columns[instance_type]['pricing'][location] = price
+                location = sku_location[offer_key]['location']
+                instance_type = sku_location[offer_key]['instance_type']
+
+                if 'pricePerUnit.USD' in prefix and value != '0.0000000000' and instance_type is not None:
+                    self.columns[instance_type]['pricing'][location] = value
