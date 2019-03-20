@@ -1,11 +1,6 @@
 import datetime
-import json
-import os
-
 from pymongo import MongoClient
-from selenium import webdriver
-from selenium.webdriver import DesiredCapabilities
-from commons.Utils import Utils
+from commons.Log import Log
 
 
 class BaseDriver:
@@ -22,12 +17,17 @@ class BaseDriver:
         self.collection_database = database[self.collection_name]
 
     def get(self):
-        self.search()
-        self.save_json()
+        try:
+            Log.debug('Iniciando processamento dos dados da {}.'.format(self.collection_name))
+            self.search()
+            self.save_json()
+        except Exception as e:
+            Log.error('Erro ao buscar os dados da {}: '.format(self.collection_name) + str(e))
 
     def search(self):
         raise NotImplementedError()
 
     def save_json(self):
+        Log.debug('Adicionando dados da {} ao banco de dados.'.format(self.collection_name))
         self.columns['_id'] = datetime.datetime.now()
         self.collection_database.insert(self.columns, check_keys=False)
