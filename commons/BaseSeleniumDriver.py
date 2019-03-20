@@ -1,3 +1,4 @@
+import _thread
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
 from commons.BaseDriver import BaseDriver
@@ -11,11 +12,12 @@ class BaseSeleniumDriver(BaseDriver):
     collection_name = 'default'
     driver = None
     tables = None
+    num_thread = 0
 
     def __init__(self):
         """Initialises the webdriver"""
         capabilities = DesiredCapabilities.FIREFOX.copy()
-        self.driver = webdriver.Remote(command_executor="http://localhost:4444/wd/hub",
+        self.driver = webdriver.Remote(command_executor="http://157.230.120.8:4444/wd/hub",
                                        desired_capabilities=capabilities)
 
         self.driver.get(self.url)
@@ -24,7 +26,7 @@ class BaseSeleniumDriver(BaseDriver):
 
         """ Buscando tabelas na página de possuem valor ($). O while é para garantir o retorno dos dados """
         while self.tables is None or len(self.tables) == 0:
-            Log.debug("Buscando dados das tabelas");
+            Log.debug("Buscando dados das tabelas")
             self.tables = self.driver.find_elements_by_xpath(
                 '//table//td[starts-with(descendant::*/text(), "$") or starts-with(text(), "$")]/../../..')
 
@@ -45,48 +47,60 @@ class BaseSeleniumDriver(BaseDriver):
             self.select_option(localization)
 
             for table in self.tables:
-                thead = table.find_element_by_tag_name("thead")
-                tbody = table.find_element_by_tag_name("tbody")
+                Log.debug('Adicionando processo para rodar em paralelo')
+                _thread.start_new_thread(self.process_table, (table, titles, localization))
 
-                """ Buscando as colunas. Tem sites que utilizam o td no lugar do th """
-                ths = thead.find_elements_by_tag_name("th")
-                if len(ths) <= 0:
-                    ths = thead.find_elements_by_tag_name("td")
+            while self.num_thread > 0:
+                pass
 
-                for th in ths:
-                    if th.text not in titles:
-                        titles.append(th.text)
+            Log.debug('Terminou de rodar todos os processos em paralelo.');
 
-                trs_body = tbody.find_elements_by_tag_name("tr")
-                for tr in trs_body:
-                    tds = tr.find_elements_by_tag_name("td")
-                    index, key = 0, None
+    def process_table(self, table, titles, localization):
+        self.num_thread += 1
+        thead = table.find_element_by_tag_name("thead")
+        tbody = table.find_element_by_tag_name("tbody")
 
-                    for td in tds:
-                        text_th = titles[index]
+        """ Buscando as colunas. Tem sites que utilizam o td no lugar do th """
+        ths = thead.find_elements_by_tag_name("th")
+        if len(ths) <= 0:
+            ths = thead.find_elements_by_tag_name("td")
 
-                        if key is None:
-                            key = td.text
+        for th in ths:
+            if th.text not in titles:
+                titles.append(th.text)
 
-                        if key not in self.columns:
-                            self.columns[key] = {}
+        trs_body = tbody.find_elements_by_tag_name("tr")
+        for tr in trs_body:
+            tds = tr.find_elements_by_tag_name("td")
+            index, key = 0, None
 
-                        """ Se for um valor agrupar em princing, se não só adicionar como uma coluna """
-                        if str(td.text).startswith('$'):
-                            if 'pricing' not in self.columns[key]:
-                                self.columns[key]['pricing'] = {}
+            for td in tds:
+                text_th = titles[index]
 
-                            if localization not in self.columns[key]['pricing']:
-                                self.columns[key]['pricing'][localization] = {}
+                if key is None:
+                    key = td.text
 
-                            self.columns[key]['pricing'][localization][text_th] = td.text
-                        else:
-                            if text_th not in self.columns[key]:
-                                self.columns[key][text_th] = {}
+                if key not in self.columns:
+                    self.columns[key] = {}
 
-                            self.columns[key][text_th] = td.text
+                """ Se for um valor agrupar em princing, se não só adicionar como uma coluna """
+                if str(td.text).startswith('$'):
+                    if 'pricing' not in self.columns[key]:
+                        self.columns[key]['pricing'] = {}
 
-                        index += 1
+                    if localization not in self.columns[key]['pricing']:
+                        self.columns[key]['pricing'][localization] = {}
+
+                    self.columns[key]['pricing'][localization][text_th] = td.text
+                else:
+                    if text_th not in self.columns[key]:
+                        self.columns[key][text_th] = {}
+
+                    self.columns[key][text_th] = td.text
+
+                index += 1
+
+        self.num_thread -= 1
 
     def select_option(self, localization):
         raise NotImplementedError()
