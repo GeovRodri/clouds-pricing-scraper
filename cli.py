@@ -11,23 +11,23 @@ def main():
     parser.add_argument("cloud", help='Digite a cloud desejada', type=str)
 
     args = parser.parse_args()
-    if args.cloud is None or args.cloud == 'aws':
+    if args.cloud == 'all' or args.cloud == 'aws':
         prices_drive = AwsDriver()
         prices_drive.get()
 
-    if args.cloud is None or args.cloud == 'azure':
+    if args.cloud == 'all' or args.cloud == 'azure':
         prices_drive = AzureDriver()
         prices_drive.get()
 
-    if args.cloud is None or args.cloud == 'google':
+    if args.cloud == 'all' or args.cloud == 'google':
         prices_drive = GoogleDriver()
         prices_drive.get()
 
-    if args.cloud is None or args.cloud == 'alibaba':
+    if args.cloud == 'all' or args.cloud == 'alibaba':
         prices_drive = AlibabaDriver()
         prices_drive.get()
 
-    if args.cloud is None or args.cloud == 'oracle':
+    if args.cloud == 'all' or args.cloud == 'oracle':
         prices_drive = OracleDriver()
         prices_drive.get()
 
