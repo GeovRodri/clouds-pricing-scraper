@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
 from commons.BaseDriver import BaseDriver
+from commons.Log import Log
 from commons.Utils import Utils
 
 
@@ -23,6 +24,7 @@ class BaseSeleniumDriver(BaseDriver):
 
         """ Buscando tabelas na página de possuem valor ($). O while é para garantir o retorno dos dados """
         while self.tables is None or len(self.tables) == 0:
+            Log.debug("Buscando dados das tabelas");
             self.tables = self.driver.find_elements_by_xpath(
                 '//table//td[starts-with(descendant::*/text(), "$") or starts-with(text(), "$")]/../../..')
 
