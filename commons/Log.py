@@ -35,7 +35,7 @@ class Log:
             if stream_type == "SCREEN":
                 stream = logging.StreamHandler()
             else:
-                stream = logging.FileHandler(logFile)
+                stream = logging.FileHandler('log.txt')
 
             formatter = logging.Formatter('[%(levelname)-7s - %(asctime)s] %(message)s')
             stream.setFormatter(formatter)
