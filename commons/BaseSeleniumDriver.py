@@ -42,7 +42,8 @@ class BaseSeleniumDriver(BaseDriver):
         localizations = self.get_localizations()
 
         """ Interagindo sobre as localizações """
-        for localization in localizations:
+        for idx, localization in localizations:
+            Log.debug('Mudando a localização para {}. {} de {}'.format(localization, idx, len(localizations)))
             """ Selecionando a opção para processar as informações dela """
             self.select_option(localization)
 
