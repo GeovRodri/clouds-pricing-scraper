@@ -42,7 +42,9 @@ class BaseSeleniumDriver(BaseDriver):
         localizations = self.get_localizations()
 
         """ Interagindo sobre as localizações """
-        for idx, localization in localizations:
+        idx = 0
+        for localization in localizations:
+            idx += 1
             Log.debug('Mudando a localização para {}. {} de {}'.format(localization, idx, len(localizations)))
             """ Selecionando a opção para processar as informações dela """
             self.select_option(localization)
@@ -54,7 +56,7 @@ class BaseSeleniumDriver(BaseDriver):
             while self.num_thread > 0:
                 pass
 
-            Log.debug('Terminou de rodar todos os processos em paralelo.');
+            Log.debug('Terminou de rodar todos os processos em paralelo.')
 
     def process_table(self, table, titles, localization):
         self.num_thread += 1
