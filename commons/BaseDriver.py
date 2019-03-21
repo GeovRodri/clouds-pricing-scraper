@@ -1,6 +1,5 @@
-import datetime
-from pymongo import MongoClient
 from commons.Log import Log
+from daos.MongoDAO import MongoDAO
 
 
 class BaseDriver:
@@ -9,12 +8,6 @@ class BaseDriver:
     collection_name = 'default'
     tables = None
     columns = {}
-    collection_database = None
-
-    def __init__(self):
-        client = MongoClient('localhost', 27017)
-        database = client['clouds-price']
-        self.collection_database = database[self.collection_name]
 
     def get(self):
         try:
@@ -28,6 +21,5 @@ class BaseDriver:
         raise NotImplementedError()
 
     def save_json(self):
-        Log.debug('Adicionando dados da {} ao banco de dados.'.format(self.collection_name))
-        self.columns['_id'] = datetime.datetime.now()
-        self.collection_database.insert(self.columns, check_keys=False)
+        mongo = MongoDAO(self.collection_name)
+        mongo.insert(self.columns)
