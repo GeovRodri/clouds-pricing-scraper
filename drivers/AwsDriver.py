@@ -24,7 +24,7 @@ class AwsDriver(BaseDriver):
                 continue
 
             if 'products' in prefix and event == 'string':
-                if 'location' in prefix:
+                if 'location' == prefix:
                     location = value
                 elif 'instanceType' in prefix:
                     instance_type = value
