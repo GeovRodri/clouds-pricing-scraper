@@ -11,12 +11,12 @@ class AzureDriver(BaseSeleniumDriver):
 
     def select_option(self, localization):
         """ Selecionando uma opção"""
-        select_localization_element = Select(self.driver.find_element_by_xpath("//select[@id='region-selector']"))
+        select_localization_element = Select(self.selenium.find_element_by_xpath("//select[@id='region-selector']"))
         select_localization_element.select_by_visible_text(localization)
 
     def get_localizations(self):
         options = []
-        select_localization_element = self.driver.find_element_by_xpath("//select[@id='region-selector']")
+        select_localization_element = self.selenium.find_element_by_xpath("//select[@id='region-selector']")
         select_localization = Select(select_localization_element)
 
         for option in select_localization.options:

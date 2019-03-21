@@ -1,39 +1,21 @@
 import _thread
-from selenium import webdriver
-from selenium.webdriver import DesiredCapabilities
 from commons.BaseDriver import BaseDriver
 from commons.Log import Log
-from commons.Utils import Utils
+from models.Selenium import Selenium
 
 
 class BaseSeleniumDriver(BaseDriver):
 
     url = ''
     collection_name = 'default'
-    driver = None
+    selenium = None
     tables = None
     num_thread = 0
 
     def __init__(self):
-        """Initialises the webdriver"""
-        capabilities = DesiredCapabilities.FIREFOX.copy()
-        self.driver = webdriver.Remote(command_executor="http://157.230.120.8:4444/wd/hub",
-                                       desired_capabilities=capabilities)
-
-        self.driver.get(self.url)
-        utils = Utils(self.driver)
-        utils.wait_for(utils.page_has_loaded)
-
-        """ Buscando tabelas na página de possuem valor ($). O while é para garantir o retorno dos dados """
-        while self.tables is None or len(self.tables) == 0:
-            Log.debug("Buscando dados das tabelas")
-            self.tables = self.driver.find_elements_by_xpath(
-                '//table//td[starts-with(descendant::*/text(), "$") or starts-with(text(), "$")]/../../..')
-
+        self.selenium = Selenium(self.url)
+        self.tables = self.selenium.get_tables()
         super().__init__()
-
-    def __del__(self):
-        self.driver.close()
 
     def search(self):
         titles = []
@@ -60,21 +42,21 @@ class BaseSeleniumDriver(BaseDriver):
 
     def process_table(self, table, titles, localization):
         self.num_thread += 1
-        thead = table.find_element_by_tag_name("thead")
-        tbody = table.find_element_by_tag_name("tbody")
+        thead = self.selenium.find_element_by_tag_name(table, "thead")
+        tbody = self.selenium.find_element_by_tag_name(table, "tbody")
 
         """ Buscando as colunas. Tem sites que utilizam o td no lugar do th """
-        ths = thead.find_elements_by_tag_name("th")
+        ths = self.selenium.find_elements_by_tag_name(thead, "th")
         if len(ths) <= 0:
-            ths = thead.find_elements_by_tag_name("td")
+            ths = self.selenium.find_elements_by_tag_name(thead, "td")
 
         for th in ths:
             if th.text not in titles:
                 titles.append(th.text)
 
-        trs_body = tbody.find_elements_by_tag_name("tr")
+        trs_body = self.selenium.find_elements_by_tag_name(tbody, "tr")
         for tr in trs_body:
-            tds = tr.find_elements_by_tag_name("td")
+            tds = self.selenium.find_elements_by_tag_name(tr, "td")
             index, key = 0, None
 
             for td in tds:

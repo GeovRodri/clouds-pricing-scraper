@@ -11,16 +11,16 @@ class GoogleDriver(BaseSeleniumDriver):
 
     def select_option(self, localization):
         """ Selecionando uma opção"""
-        options = self.driver.find_elements_by_xpath("//md-option//div[@class='md-text'][contains(text(),'{}')]/.."
+        options = self.selenium.find_elements_by_xpath("//md-option//div[@class='md-text'][contains(text(),'{}')]/.."
                                                      .format(localization))
         for option in options:
-            self.driver.execute_script("$('#{}').click()".format(option.get_attribute("id")))
+            self.selenium.execute_script("$('#{}').click()".format(option.get_attribute("id")))
             sleep(2)
-            self.driver.execute_script("$('.md-select-backdrop').click()")
+            self.selenium.execute_script("$('.md-select-backdrop').click()")
 
     def get_localizations(self):
         options = []
-        options_page = self.driver.find_elements_by_xpath("//md-option//div[@class='md-text']")
+        options_page = self.selenium.find_elements_by_xpath("//md-option//div[@class='md-text']")
         for option in options_page:
             text = option.get_attribute('textContent')
             if text not in options and len(text) > 0:
