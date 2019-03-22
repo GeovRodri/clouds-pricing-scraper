@@ -45,8 +45,9 @@ class AwsDriver(BaseDriver):
                 index_on_demand = prefix_keys.index('OnDemand')
                 offer_key = prefix_keys[(index_on_demand + 1)]
 
-                location = sku_location[offer_key]['location']
-                instance_type = sku_location[offer_key]['instance_type']
+                if offer_key in sku_location:
+                    location = sku_location[offer_key]['location']
+                    instance_type = sku_location[offer_key]['instance_type']
 
-                if 'pricePerUnit.USD' in prefix and value != '0.0000000000' and instance_type is not None:
-                    self.columns[instance_type]['pricing'][location] = value
+                    if 'pricePerUnit.USD' in prefix and value != '0.0000000000' and instance_type is not None:
+                        self.columns[instance_type]['pricing'][location] = value
