@@ -18,27 +18,35 @@ class AwsDriver(BaseDriver):
         location = None
         instance_type = None
         sku = None
+        attributes = {}
 
         for prefix, event, value in pages:
             if prefix == '':
                 continue
 
             if 'products' in prefix and event == 'string':
-                if 'location' == prefix:
+                prefix_keys = prefix.split('.')
+                last_key = str(prefix_keys[(len(prefix_keys) - 1)])
+
+                if 'location' == last_key:
                     location = value
-                elif 'instanceType' in prefix:
+                elif 'instanceType' == last_key:
                     instance_type = value
-                    self.columns[instance_type] = {}
-                    self.columns[instance_type]['pricing'] = {}
-                elif 'sku' in prefix:
+                    attributes['pricing'] = {}
+                elif 'sku' == last_key:
+                    """ Ao trocar o sku reiniciar todas as variaveis e inserir os atributos ao dicionario """
+                    if sku is not None and sku != value:
+                        self.columns[instance_type] = attributes
+                        location = None
+                        instance_type = None
+
                     sku = value
 
                 if sku is not None and location is not None and instance_type is not None:
                     sku_location[sku] = {'location': location, 'instance_type': instance_type}
 
-                    if 'attributes' in prefix and 'location' not in prefix and 'instanceType' not in prefix:
-                        prefix_keys = prefix.split('.')
-                        self.columns[instance_type][prefix_keys[(len(prefix_keys) - 1)]] = value
+                if 'attributes' in prefix and 'location' not in prefix and 'instanceType' not in prefix:
+                    attributes[last_key] = value
 
             elif 'terms.OnDemand' in prefix and event == 'string':
                 prefix_keys = prefix.split('.')
