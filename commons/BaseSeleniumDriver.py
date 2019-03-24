@@ -61,6 +61,11 @@ class BaseSeleniumDriver(BaseDriver):
 
             for td in tds:
                 text_th = titles[index]
+                index += 1
+
+                # pulando itens que não possuem texto. Ex: botões na tabela
+                if td.text == "" or td.text is None:
+                    continue
 
                 if key is None:
                     key = td.text
@@ -82,8 +87,6 @@ class BaseSeleniumDriver(BaseDriver):
                         self.columns[key][text_th] = {}
 
                     self.columns[key][text_th] = td.text
-
-                index += 1
 
         self.num_thread -= 1
 
