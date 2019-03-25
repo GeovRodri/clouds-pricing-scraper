@@ -1,4 +1,5 @@
 import argparse
+from commons.Utils import Utils
 from drivers.AlibabaDriver import AlibabaDriver
 from drivers.AwsDriver import AwsDriver
 from drivers.AzureDriver import AzureDriver
@@ -9,6 +10,9 @@ from drivers.OracleDriver import OracleDriver
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("cloud", help='Digite a cloud desejada', type=str)
+
+    """ Iniciando docker """
+    Utils.start_docker()
 
     args = parser.parse_args()
     if args.cloud == 'all' or args.cloud == 'aws':
