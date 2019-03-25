@@ -17,6 +17,9 @@ class BaseSeleniumDriver(BaseDriver):
         self.tables = self.selenium.get_tables()
         super().__init__()
 
+    def __del__(self):
+        del self.selenium
+
     def search(self):
         titles = []
 

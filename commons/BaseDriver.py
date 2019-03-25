@@ -9,6 +9,10 @@ class BaseDriver:
     tables = None
     columns = {}
 
+    def __init__(self):
+        self.tables = None
+        self.columns = {}
+
     def get(self):
         try:
             Log.debug('Iniciando processamento dos dados da {}.'.format(self.collection_name))
