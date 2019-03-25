@@ -10,6 +10,9 @@ class AwsDriver(BaseDriver):
         self.collection_name = 'aws'
         super().__init__()
 
+    def is_blank(self, my_string):
+        return not (my_string and str(my_string).strip())
+
     def search(self):
         response = urlopen(self.url)
         pages = ijson.parse(response)
@@ -21,7 +24,7 @@ class AwsDriver(BaseDriver):
         attributes = {}
 
         for prefix, event, value in pages:
-            if prefix == '':
+            if self.is_blank(prefix) is True or self.is_blank(value) is True:
                 continue
 
             if 'products' in prefix and event == 'string':
@@ -35,10 +38,11 @@ class AwsDriver(BaseDriver):
                     attributes['pricing'] = {}
                 elif 'sku' == last_key:
                     """ Ao trocar o sku reiniciar todas as variaveis e inserir os atributos ao dicionario """
-                    if sku is not None and sku != value:
+                    if sku is not None and sku != value and instance_type is not None:
                         self.columns[instance_type] = attributes
                         location = None
                         instance_type = None
+                        attributes = {}
 
                     sku = value
 
