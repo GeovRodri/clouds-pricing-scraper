@@ -13,9 +13,9 @@ class BaseSeleniumDriver(BaseDriver):
     num_thread = 0
 
     def __init__(self):
+        super().__init__()
         self.selenium = Selenium(self.url)
         self.tables = self.selenium.get_tables()
-        super().__init__()
 
     def __del__(self):
         del self.selenium
