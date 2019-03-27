@@ -37,6 +37,7 @@ class BaseSeleniumDriver(BaseDriver):
             for table in self.tables:
                 Log.debug('Adicionando processo para rodar em paralelo')
                 _thread.start_new_thread(self.process_table, (table, titles, localization))
+                self.selenium.execute_script("console.log('teste')") # Evitando que o selenium feche a instancia antes do tempo
 
             while self.num_thread > 0:
                 pass
