@@ -1,5 +1,6 @@
 from time import sleep
 from commons.BaseSeleniumDriver import BaseSeleniumDriver
+from models.Selenium import Selenium
 
 
 class GoogleDriver(BaseSeleniumDriver):
@@ -11,16 +12,16 @@ class GoogleDriver(BaseSeleniumDriver):
 
     def select_option(self, localization):
         """ Selecionando uma opção"""
-        options = self.selenium.find_elements_by_xpath("//md-option//div[@class='md-text'][contains(text(),'{}')]/.."
-                                                     .format(localization))
+        options = Selenium.find_elements_by_xpath("//md-option//div[@class='md-text'][contains(text(),'{}')]/.."
+                                                  .format(localization))
         for option in options:
-            self.selenium.execute_script("$('#{}').click()".format(option.get_attribute("id")))
+            Selenium.execute_script("$('#{}').click()".format(option.get_attribute("id")))
             sleep(2)
-            self.selenium.execute_script("$('.md-select-backdrop').click()")
+            Selenium.execute_script("$('.md-select-backdrop').click()")
 
     def get_localizations(self):
         options = []
-        options_page = self.selenium.find_elements_by_xpath("//md-option//div[@class='md-text']")
+        options_page = Selenium.find_elements_by_xpath("//md-option//div[@class='md-text']")
         for option in options_page:
             text = option.get_attribute('textContent')
             if text not in options and len(text) > 0:

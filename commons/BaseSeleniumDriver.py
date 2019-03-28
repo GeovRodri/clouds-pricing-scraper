@@ -1,4 +1,3 @@
-import _thread
 from commons.BaseDriver import BaseDriver
 from commons.Log import Log
 from models.Selenium import Selenium
@@ -8,20 +7,15 @@ class BaseSeleniumDriver(BaseDriver):
 
     url = ''
     collection_name = 'default'
-    selenium = None
     tables = None
     num_thread = 0
 
-    def __init__(self):
-        super().__init__()
-        self.selenium = Selenium(self.url)
-        self.tables = self.selenium.get_tables()
-
-    def __del__(self):
-        del self.selenium
-
     def search(self):
         titles = []
+
+        """ Inicializando selenium """
+        Selenium.get_url(self.url)
+        self.tables = Selenium.get_tables()
 
         """ Pegando o select de seleção de localização """
         localizations = self.get_localizations()
@@ -36,8 +30,9 @@ class BaseSeleniumDriver(BaseDriver):
 
             for table in self.tables:
                 Log.debug('Adicionando processo para rodar em paralelo')
-                _thread.start_new_thread(self.process_table, (table, titles, localization))
-                self.selenium.execute_script("console.log('teste')") # Evitando que o selenium feche a instancia antes do tempo
+                # _thread.start_new_thread(self.process_table, (table, titles, localization))
+                self.process_table(table, titles, localization)
+                Selenium.execute_script("console.log('teste')") # Evitando que o selenium feche a instancia antes do tempo
 
             while self.num_thread > 0:
                 pass
@@ -46,21 +41,21 @@ class BaseSeleniumDriver(BaseDriver):
 
     def process_table(self, table, titles, localization):
         self.num_thread += 1
-        thead = self.selenium.find_element_by_tag_name(table, "thead")
-        tbody = self.selenium.find_element_by_tag_name(table, "tbody")
+        thead = Selenium.find_element_by_tag_name(table, "thead")
+        tbody = Selenium.find_element_by_tag_name(table, "tbody")
 
         """ Buscando as colunas. Tem sites que utilizam o td no lugar do th """
-        ths = self.selenium.find_elements_by_tag_name(thead, "th")
+        ths = Selenium.find_elements_by_tag_name(thead, "th")
         if len(ths) <= 0:
-            ths = self.selenium.find_elements_by_tag_name(thead, "td")
+            ths = Selenium.find_elements_by_tag_name(thead, "td")
 
         for th in ths:
             if th.text not in titles:
                 titles.append(th.text)
 
-        trs_body = self.selenium.find_elements_by_tag_name(tbody, "tr")
+        trs_body = Selenium.find_elements_by_tag_name(tbody, "tr")
         for tr in trs_body:
-            tds = self.selenium.find_elements_by_tag_name(tr, "td")
+            tds = Selenium.find_elements_by_tag_name(tr, "td")
             index, key = 0, None
 
             for td in tds:

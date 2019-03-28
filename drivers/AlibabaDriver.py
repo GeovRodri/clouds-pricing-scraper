@@ -7,13 +7,15 @@ class AlibabaDriver(BaseDriver):
     def __init__(self):
         self.url = "https://www.alibabacloud.com/product/ecs"
         self.collection_name = 'alibaba'
-        self.selenium = Selenium(self.url)
         super().__init__()
 
     def search(self):
+        """ Inicializando selenium """
+        Selenium.get_url(self.url)
+
         localizations = self.get_localizations()
         xpath_products = "//*[contains(@class, 'reseller-band-color')]//div[contains(@class, 'box')]"
-        cards = self.selenium.find_elements_by_xpath(xpath_products)
+        cards = Selenium.find_elements_by_xpath(xpath_products)
         products_os = self.get_os()
 
         for product_os in products_os:
@@ -25,8 +27,8 @@ class AlibabaDriver(BaseDriver):
 
                 for card in cards:
                     card_xpath = xpath_products + '[{}]'.format(index_card)
-                    price = self.selenium.find_element_by_xpath(card_xpath + "//*[contains(@class, 'price')]").text
-                    items = self.selenium.find_elements_by_xpath(card_xpath + "//li")
+                    price = Selenium.find_element_by_xpath(card_xpath + "//*[contains(@class, 'price')]").text
+                    items = Selenium.find_elements_by_xpath(card_xpath + "//li")
                     key = "{}_{}".format(index_card, product_os)
 
                     if key not in self.columns:
@@ -50,12 +52,12 @@ class AlibabaDriver(BaseDriver):
                     index_card += 1
 
     def select_option(self, localization):
-        select = self.selenium.find_element_by_xpath('//a[contains(text(),"{}")]'.format(localization))
+        select = Selenium.find_element_by_xpath('//a[contains(text(),"{}")]'.format(localization))
         select.click()
 
     def get_localizations(self):
         options = []
-        selects = self.selenium.find_elements_by_xpath("//*[contains(@class,'get-regions')]//dd")
+        selects = Selenium.find_elements_by_xpath("//*[contains(@class,'get-regions')]//dd")
 
         for element in selects:
             options.append(element.text)
@@ -64,7 +66,7 @@ class AlibabaDriver(BaseDriver):
 
     def get_os(self):
         options = []
-        selects = self.selenium.find_elements_by_xpath("//*[contains(@class,'get-os')]//dd")
+        selects = Selenium.find_elements_by_xpath("//*[contains(@class,'get-os')]//dd")
 
         for element in selects:
             options.append(element.text)
