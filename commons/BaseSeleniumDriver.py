@@ -8,7 +8,6 @@ class BaseSeleniumDriver(BaseDriver):
     url = ''
     collection_name = 'default'
     tables = None
-    num_thread = 0
 
     def search(self):
         titles = []
@@ -29,18 +28,10 @@ class BaseSeleniumDriver(BaseDriver):
             self.select_option(localization)
 
             for table in self.tables:
-                Log.debug('Adicionando processo para rodar em paralelo')
-                # _thread.start_new_thread(self.process_table, (table, titles, localization))
                 self.process_table(table, titles, localization)
                 Selenium.execute_script("console.log('teste')") # Evitando que o selenium feche a instancia antes do tempo
 
-            while self.num_thread > 0:
-                pass
-
-            Log.debug('Terminou de rodar todos os processos em paralelo.')
-
     def process_table(self, table, titles, localization):
-        self.num_thread += 1
         thead = Selenium.find_element_by_tag_name(table, "thead")
         tbody = Selenium.find_element_by_tag_name(table, "tbody")
 
@@ -86,8 +77,6 @@ class BaseSeleniumDriver(BaseDriver):
                         self.columns[key][text_th] = {}
 
                     self.columns[key][text_th] = td.text
-
-        self.num_thread -= 1
 
     def select_option(self, localization):
         raise NotImplementedError()

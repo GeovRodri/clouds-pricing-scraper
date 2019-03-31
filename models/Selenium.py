@@ -11,8 +11,9 @@ class Selenium:
     lock = Lock()  # Utilizado para ter apenas uma execução no selenium por vez
     driver = None
 
-    def __del__(self):
-        self.driver.close()
+    @staticmethod
+    def close_selenium():
+        Selenium.driver.close()
 
     @staticmethod
     def initialize_driver():

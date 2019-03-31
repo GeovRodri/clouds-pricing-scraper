@@ -53,6 +53,8 @@ def main():
         # Forçando o Garbage Collector do python rodar para liberar memoria
         gc.collect()
 
+    Selenium.close_selenium()
+
 
 if __name__ == '__main__':
     main()
