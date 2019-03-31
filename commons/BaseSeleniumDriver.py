@@ -29,7 +29,6 @@ class BaseSeleniumDriver(BaseDriver):
 
             for table in self.tables:
                 self.process_table(table, titles, localization)
-                Selenium.execute_script("console.log('teste')") # Evitando que o selenium feche a instancia antes do tempo
 
     def process_table(self, table, titles, localization):
         thead = Selenium.find_element_by_tag_name(table, "thead")
