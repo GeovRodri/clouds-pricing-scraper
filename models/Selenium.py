@@ -1,4 +1,6 @@
+import os
 from multiprocessing import Lock
+from time import sleep
 
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
@@ -19,6 +21,17 @@ class Selenium:
     def initialize_driver():
         try:
             Selenium.lock.acquire()
+            Log.info('Killing firefox active containers...')
+            os.system('docker kill firefox')
+
+            Log.info('Removing old firefox containers...')
+            os.system('docker rm firefox')
+
+            Log.info('Running a new firefox container...')
+            os.system('docker run -d -p 4444:4444 -p 5900:5900 --name firefox --network selenium'
+                      ' -v /dev/shm:/dev/shm selenium/standalone-firefox-debug:3.14.0-dubnium')
+            sleep(10)
+
             """Initialises the webdriver"""
             capabilities = DesiredCapabilities.FIREFOX.copy()
             Selenium.driver = webdriver.Remote(command_executor="localhost:4444/wd/hub", desired_capabilities=capabilities)
@@ -27,6 +40,7 @@ class Selenium:
 
     @staticmethod
     def get_url(url):
+        Selenium.initialize_driver()
         Selenium.driver.get(url)
         utils = Utils(Selenium.driver)
         utils.wait_for(utils.page_has_loaded)

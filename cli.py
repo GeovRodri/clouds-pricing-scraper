@@ -1,6 +1,5 @@
 import argparse
 import gc
-from commons.Utils import Utils
 from drivers.AlibabaDriver import AlibabaDriver
 from drivers.AwsDriver import AwsDriver
 from drivers.AzureDriver import AzureDriver
@@ -12,10 +11,6 @@ from models.Selenium import Selenium
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("cloud", help='Digite a cloud desejada', type=str)
-
-    """ Iniciando docker """
-    Utils.start_docker()
-    Selenium.initialize_driver()
 
     args = parser.parse_args()
     if args.cloud == 'all' or args.cloud == 'aws':

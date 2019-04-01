@@ -1,3 +1,5 @@
+from selenium.common.exceptions import WebDriverException
+
 from commons.BaseDriver import BaseDriver
 from commons.Log import Log
 from models.Selenium import Selenium
@@ -28,7 +30,16 @@ class BaseSeleniumDriver(BaseDriver):
             self.select_option(localization)
 
             for table in self.tables:
-                self.process_table(table, titles, localization)
+                # Se der erro no selenium restartar o processamento
+                success = False
+
+                while success is False:
+                    try:
+                        self.process_table(table, titles, localization)
+                        success = True
+                    except WebDriverException as e:
+                        Log.error("Erro ao buscar uma table. Erro: {}".format(str(e)))
+                        Selenium.get_url(self.url)
 
     def process_table(self, table, titles, localization):
         thead = Selenium.find_element_by_tag_name(table, "thead")
