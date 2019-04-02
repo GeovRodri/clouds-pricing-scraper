@@ -29,7 +29,7 @@ class Selenium:
 
             Log.info('Running a new firefox container...')
             os.system('docker run -d -p 4444:4444 -p 5900:5900 --name firefox --network selenium'
-                      ' -v /dev/shm:/dev/shm selenium/standalone-firefox-debug:3.14.0-dubnium')
+                      ' -v /dev/shm:/dev/shm selenium/standalone-firefox-debug:3.141.59-dubnium')
             sleep(10)
 
             """Initialises the webdriver"""
