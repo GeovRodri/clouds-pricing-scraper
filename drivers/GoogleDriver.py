@@ -1,3 +1,4 @@
+import asyncio
 from time import sleep
 from commons.BaseSeleniumDriver import BaseSeleniumDriver
 from models.Chrome import Chrome
@@ -15,15 +16,20 @@ class GoogleDriver(BaseSeleniumDriver):
         options = Chrome.find_elements_by_xpath("//md-option//div[@class='md-text'][contains(text(),'{}')]/.."
                                                 .format(localization))
         for option in options:
-            Chrome.execute_script("$('#{}').click()".format(option.get_attribute("id")))
+            asyncio.get_event_loop().run_until_complete(
+                Chrome.execute_script("() => document.getElementById('{}').click()".format(option.attrs['id'])))
             sleep(2)
-            Chrome.execute_script("$('.md-select-backdrop').click()")
+            asyncio.get_event_loop().run_until_complete(
+                Chrome.execute_script("() => { "
+                                      "         var element = document.getElementsByClassName('md-select-backdrop')[0];"
+                                      "         if (element) element.click(); "
+                                      "} "))
 
     def get_localizations(self):
         options = []
         options_page = Chrome.find_elements_by_xpath("//md-option//div[@class='md-text']")
         for option in options_page:
-            text = option.get_attribute('textContent')
+            text = option.text
             if text not in options and len(text) > 0:
                 options.append(text)
 

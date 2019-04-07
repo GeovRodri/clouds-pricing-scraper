@@ -95,10 +95,13 @@ class Chrome:
     async def execute_script(script):
         try:
             Chrome.lock.acquire()
-            await Chrome.driver.html.page.evaluate(script)
+            page = Chrome.driver.html.page
+            await page.evaluate(script)
 
-            content = await Chrome.driver.html.page.content()
-            Chrome.driver._html = HTML(url=Chrome.driver.url, html=content)
+            content = await page.content()
+            html = HTML(url=Chrome.driver.url, html=content.encode('utf-8'), default_encoding='utf-8')
+            Chrome.driver.html.__dict__.update(html.__dict__)
+            Chrome.driver.html.page = page
         finally:
             Chrome.lock.release()
 
