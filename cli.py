@@ -14,12 +14,12 @@ def main():
     Chrome.initialize_driver()
 
     args = parser.parse_args()
-    # if args.cloud == 'all' or args.cloud == 'aws':
-    #     prices_drive = AwsDriver()
-    #     prices_drive.get()
-    #     del prices_drive
-    #     # Forçando o Garbage Collector do python rodar para liberar memoria
-    #     gc.collect()
+    if args.cloud == 'all' or args.cloud == 'aws':
+        prices_drive = AwsDriver()
+        prices_drive.get()
+        del prices_drive
+        # Forçando o Garbage Collector do python rodar para liberar memoria
+        gc.collect()
 
     if args.cloud == 'all' or args.cloud == 'azure':
         prices_drive = AzureDriver()
