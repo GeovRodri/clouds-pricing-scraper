@@ -1,4 +1,3 @@
-from selenium.common.exceptions import WebDriverException
 from commons.BaseDriver import BaseDriver
 from commons.Log import Log
 from models.Chrome import Chrome
@@ -14,7 +13,7 @@ class BaseSeleniumDriver(BaseDriver):
         titles = []
 
         # Inicializando a sessão e pegando as tabelas
-        Chrome.get_url(self.url)
+        Chrome.get_url(self.url, self.after_load_url)
 
         """ Pegando o select de seleção de localização """
         localizations = self.get_localizations()
@@ -29,16 +28,7 @@ class BaseSeleniumDriver(BaseDriver):
             self.tables = Chrome.get_tables()
 
             for table in self.tables:
-                # Se der erro no selenium restartar o processamento
-                success = False
-
-                while success is False:
-                    try:
-                        self.process_table(table, titles, localization)
-                        success = True
-                    except WebDriverException as e:
-                        Log.error("Erro ao buscar uma table. Erro: {}".format(str(e)))
-                        Chrome.get_url(self.url)
+                self.process_table(table, titles, localization)
 
     def process_table(self, table, titles, localization):
         thead = Chrome.find_element_by_tag_name(table, "thead")
@@ -86,6 +76,9 @@ class BaseSeleniumDriver(BaseDriver):
                         self.columns[key][text_th] = {}
 
                     self.columns[key][text_th] = td.text
+
+    def after_load_url(self):
+        pass
 
     def select_option(self, localization):
         raise NotImplementedError()

@@ -22,7 +22,7 @@ class Chrome:
             Chrome.lock.release()
 
     @staticmethod
-    def get_url(url):
+    def get_url(url, callback=None):
         try:
             Chrome.lock.acquire()
             user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
@@ -30,6 +30,8 @@ class Chrome:
             Chrome.driver.html.render(keep_page=True)
         finally:
             Chrome.lock.release()
+            if callback is not None:
+                callback()
 
     @staticmethod
     def get_tables():
