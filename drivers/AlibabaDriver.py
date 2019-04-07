@@ -1,3 +1,5 @@
+import asyncio
+
 from commons.BaseDriver import BaseDriver
 from models.Chrome import Chrome
 
@@ -37,7 +39,7 @@ class AlibabaDriver(BaseDriver):
                     for item in items:
                         """ Pegando o titulo e a valor, como os dois estão juntos estou considerando o que está em negrito
                          é o valor e o restante o titulo"""
-                        value = item.find_element_by_tag_name('b').text
+                        value = Chrome.find_element_by_tag_name(item, 'b').text
                         title = str(item.text).replace(value, '')
                         self.columns[key][title] = value
 
@@ -52,8 +54,7 @@ class AlibabaDriver(BaseDriver):
                     index_card += 1
 
     def select_option(self, localization):
-        select = Chrome.find_element_by_xpath('//a[contains(text(),"{}")]'.format(localization))
-        select.click()
+        asyncio.get_event_loop().run_until_complete(Chrome.click_using_text_and_tag(localization, 'a'))
 
     def get_localizations(self):
         options = []

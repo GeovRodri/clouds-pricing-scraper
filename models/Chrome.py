@@ -124,5 +124,27 @@ class Chrome:
             Chrome.lock.release()
 
     @staticmethod
-    def replace_right(source, target, replacement, replacements=None):
-        return replacement.join(source.rsplit(target, replacements))
+    async def click_using_text_and_tag(text, tag):
+        try:
+            Chrome.lock.acquire()
+            script = 'var aTags = document.getElementsByTagName("' + tag + '"); ' \
+                     'var searchText = "' + text + '"; ' \
+                     'var found; ' \
+                     '' \
+                     'for (var i = 0; i < aTags.length; i++) { ' \
+                     '  if (aTags[i].textContent == searchText) { ' \
+                     '      found = aTags[i]; ' \
+                     '      found.click();' \
+                     '      break; ' \
+                     '  }' \
+                     '}'
+
+            page = Chrome.driver.html.page
+            await page.evaluate(script)
+
+            content = await page.content()
+            html = HTML(url=Chrome.driver.url, html=content.encode('utf-8'), default_encoding='utf-8')
+            Chrome.driver.html.__dict__.update(html.__dict__)
+            Chrome.driver.html.page = page
+        finally:
+            Chrome.lock.release()

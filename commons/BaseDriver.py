@@ -1,5 +1,3 @@
-import json
-
 from commons.Log import Log
 from daos.MongoDAO import MongoDAO
 
@@ -16,17 +14,16 @@ class BaseDriver:
         self.columns = {}
 
     def get(self):
-        # try:
-        #     Log.debug('Iniciando processamento dos dados da {}.'.format(self.collection_name))
+        try:
+            Log.debug('Iniciando processamento dos dados da {}.'.format(self.collection_name))
             self.search()
             self.save_json()
-        # except Exception as e:
-        #     Log.error('Erro ao buscar os dados da {}: '.format(self.collection_name) + str(e))
+        except Exception as e:
+            Log.error('Erro ao buscar os dados da {}: '.format(self.collection_name) + str(e))
 
     def search(self):
         raise NotImplementedError()
 
     def save_json(self):
-        # mongo = MongoDAO(self.collection_name)
-        # mongo.insert(self.columns)
-        print(json.dumps(self.columns))
+        mongo = MongoDAO(self.collection_name)
+        mongo.insert(self.columns)
