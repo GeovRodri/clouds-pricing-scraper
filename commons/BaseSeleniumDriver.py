@@ -1,8 +1,7 @@
 from selenium.common.exceptions import WebDriverException
-
 from commons.BaseDriver import BaseDriver
 from commons.Log import Log
-from models.Selenium import Selenium
+from models.Chrome import Chrome
 
 
 class BaseSeleniumDriver(BaseDriver):
@@ -14,9 +13,8 @@ class BaseSeleniumDriver(BaseDriver):
     def search(self):
         titles = []
 
-        """ Inicializando selenium """
-        Selenium.get_url(self.url)
-        self.tables = Selenium.get_tables()
+        # Inicializando a sessão e pegando as tabelas
+        Chrome.get_url(self.url)
 
         """ Pegando o select de seleção de localização """
         localizations = self.get_localizations()
@@ -28,6 +26,7 @@ class BaseSeleniumDriver(BaseDriver):
             Log.debug('Mudando a localização para {}. {} de {}'.format(localization, idx, len(localizations)))
             """ Selecionando a opção para processar as informações dela """
             self.select_option(localization)
+            self.tables = Chrome.get_tables()
 
             for table in self.tables:
                 # Se der erro no selenium restartar o processamento
@@ -39,24 +38,24 @@ class BaseSeleniumDriver(BaseDriver):
                         success = True
                     except WebDriverException as e:
                         Log.error("Erro ao buscar uma table. Erro: {}".format(str(e)))
-                        Selenium.get_url(self.url)
+                        Chrome.get_url(self.url)
 
     def process_table(self, table, titles, localization):
-        thead = Selenium.find_element_by_tag_name(table, "thead")
-        tbody = Selenium.find_element_by_tag_name(table, "tbody")
+        thead = Chrome.find_element_by_tag_name(table, "thead")
+        tbody = Chrome.find_element_by_tag_name(table, "tbody")
 
         """ Buscando as colunas. Tem sites que utilizam o td no lugar do th """
-        ths = Selenium.find_elements_by_tag_name(thead, "th")
+        ths = Chrome.find_elements_by_tag_name(thead, "th")
         if len(ths) <= 0:
-            ths = Selenium.find_elements_by_tag_name(thead, "td")
+            ths = Chrome.find_elements_by_tag_name(thead, "td")
 
         for th in ths:
             if th.text not in titles:
                 titles.append(th.text)
 
-        trs_body = Selenium.find_elements_by_tag_name(tbody, "tr")
+        trs_body = Chrome.find_elements_by_tag_name(tbody, "tr")
         for tr in trs_body:
-            tds = Selenium.find_elements_by_tag_name(tr, "td")
+            tds = Chrome.find_elements_by_tag_name(tr, "td")
             index, key = 0, None
 
             for td in tds:

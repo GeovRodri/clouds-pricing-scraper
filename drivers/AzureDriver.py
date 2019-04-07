@@ -1,6 +1,7 @@
-from selenium.webdriver.support.select import Select
+import asyncio
+
 from commons.BaseSeleniumDriver import BaseSeleniumDriver
-from models.Selenium import Selenium
+from models.Chrome import Chrome
 
 
 class AzureDriver(BaseSeleniumDriver):
@@ -12,15 +13,15 @@ class AzureDriver(BaseSeleniumDriver):
 
     def select_option(self, localization):
         """ Selecionando uma opção"""
-        select_localization_element = Select(Selenium.find_element_by_xpath("//select[@id='region-selector']"))
-        select_localization_element.select_by_visible_text(localization)
+        option = Chrome.find_elements_by_xpath("//select[@id='region-selector']//option[text() = '{}']"
+                                               .format(localization))[0]
+        asyncio.get_event_loop().run_until_complete(Chrome.select_option("region-selector", option.attrs['value']))
 
     def get_localizations(self):
         options = []
-        select_localization_element = Selenium.find_element_by_xpath("//select[@id='region-selector']")
-        select_localization = Select(select_localization_element)
+        options_elements = Chrome.find_elements_by_xpath("//select[@id='region-selector']//option")
 
-        for option in select_localization.options:
+        for option in options_elements:
             options.append(option.text)
 
         return options

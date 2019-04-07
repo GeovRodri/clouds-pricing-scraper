@@ -1,5 +1,6 @@
-selenium
 requests
 ijson
 pymongo
 unidecode
+requests-html
+websockets==6.0
