@@ -1,14 +1,11 @@
 import re
-from itertools import cycle
-
-import matplotlib
-import numpy
 import pymongo
 import argparse
+import matplotlib
+from itertools import cycle
 import matplotlib.pyplot as plt
-from sshtunnel import SSHTunnelForwarder
-from datetime import timedelta, datetime
 import matplotlib.dates as mdates
+from sshtunnel import SSHTunnelForwarder
 
 
 def main():
@@ -39,10 +36,13 @@ def main():
         del data['_id']
 
         for key in data:
+            item = data[key]
+            if 'pricing' not in item:
+                continue
+
             if key not in pricing:
                 pricing[key] = {}
 
-            item = data[key]
             regions = item['pricing']
             for region in regions:
                 prices = regions[region]
@@ -50,7 +50,7 @@ def main():
                 if region not in pricing[key]:
                     pricing[key][region] = {}
 
-                if isinstance(prices, list):
+                if isinstance(prices, dict):
                     for price in prices:
                         if price not in pricing[key][region]:
                             pricing[key][region][price] = {'t': [], 'p': []}
@@ -60,8 +60,12 @@ def main():
                         price_number = float(re.sub('[^0-9.,]', '', prices[price]))
                         pricing[key][region][price]['p'].append(price_number)
                 else:
+                    if "price" not in pricing[key][region]:
+                        pricing[key][region]["price"] = {'t': [], 'p': []}
+
                     price_number = float(re.sub('[^0-9.,]', '', prices))
-                    pricing[key][region]["price"] = {'t': [date], 'p': [price_number]}
+                    pricing[key][region]["price"]['t'].append(date)
+                    pricing[key][region]["price"]['p'].append(price_number)
 
     for type_cloud in pricing:
         fig, ax = plt.subplots()
@@ -77,19 +81,20 @@ def main():
                 prices = pricing[type_cloud][region][price]['p']
 
                 dates = matplotlib.dates.date2num(dates)
-                ax.plot_date(dates, prices, 'b-', c=cycol.__next__(), drawstyle='steps-pre')
+                ax.plot(dates, prices, 'b-', c=cycol.__next__(), drawstyle='steps-pre')
                 ax.set_xticks(dates)
 
         ax.legend(regions, bbox_to_anchor=(1.05, 1), loc='upper left')
         ax.set(xlabel='data (s)', ylabel='preço (p)', title=type_cloud)
         ax.grid()
 
-        ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%d"))
-        ax.xaxis.set_minor_formatter(mdates.DateFormatter("%Y-%d"))
-        _ = plt.xticks(rotation=90)
+        ax.xaxis.set_major_formatter(mdates.DateFormatter("%d-%m"))
+        ax.xaxis.set_minor_formatter(mdates.DateFormatter("%d-%m"))
+        plt.gca().xaxis.set_major_locator(mdates.AutoDateLocator())
+        plt.setp(plt.gca().get_xticklabels(), rotation=45, ha="right")
 
+        plt.tight_layout()
         fig.savefig("graphics/" + args.collection + "/" + type_cloud + ".png")
-        plt.show()
 
     server.close()
 
