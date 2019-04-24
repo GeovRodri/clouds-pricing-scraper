@@ -57,7 +57,25 @@ def main():
 
                         pricing[key][region][price]['t'].append(date)
 
-                        price_number = float(re.sub('[^0-9.,]', '', prices[price]))
+                        idx_start_price = str(prices[price]).find('$')
+                        space_idx = str(prices[price]).find(' ')
+                        barra_idx = str(prices[price]).find('/')
+
+                        if space_idx == -1:
+                            space_idx = 1000
+
+                        if barra_idx == -1:
+                            barra_idx = 1000
+
+                        idx_end_price = min(space_idx, barra_idx)
+                        extract_price = prices[price][idx_start_price: idx_end_price]
+                        print('Before value: {}     after value: {}'.format(prices[price], extract_price))
+
+                        string_price_number = re.sub('[^0-9.,]', '', extract_price)
+                        if string_price_number is None or string_price_number == "":
+                            string_price_number = "0"
+
+                        price_number = float(string_price_number)
                         pricing[key][region][price]['p'].append(price_number)
                 else:
                     if "price" not in pricing[key][region]:
@@ -84,7 +102,7 @@ def main():
                 ax.plot(dates, prices, 'b-', c=cycol.__next__(), drawstyle='steps-pre')
                 ax.set_xticks(dates)
 
-        ax.legend(regions, bbox_to_anchor=(1.05, 1), loc='upper left')
+        lgd = ax.legend(regions, bbox_to_anchor=(0., 1.02, 1., .102), loc='lower center', ncol=2)
         ax.set(xlabel='data (s)', ylabel='preço (p)', title=type_cloud)
         ax.grid()
 
@@ -94,7 +112,9 @@ def main():
         plt.setp(plt.gca().get_xticklabels(), rotation=45, ha="right")
 
         plt.tight_layout()
-        fig.savefig("graphics/" + args.collection + "/" + type_cloud + ".png")
+        filename = re.sub('[^A-Za-z0-9]+', '', type_cloud)
+        # fig.savefig("graphics/" + args.collection + "/" + filename + ".png", mode="expand")
+        fig.savefig("graphics/" + args.collection + "/" + filename + ".png", bbox_extra_artists=(lgd,), bbox_inches='tight')
 
     server.close()
 
