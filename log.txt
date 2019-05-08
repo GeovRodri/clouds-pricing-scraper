@@ -1,0 +1,222 @@
+
+[DEBUG   - 2019-04-06 22:58:20,008] GoogleDriver.search - Mudando a localizacao para Iowa (us-central1). 1 de 19
+[DEBUG   - 2019-04-06 22:58:58,049] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-06 22:58:59,297] GoogleDriver.search - Mudando a localizacao para Los Angeles (us-west2). 2 de 19
+[DEBUG   - 2019-04-06 23:07:36,040] GoogleDriver.search - Mudando a localizacao para Iowa (us-central1). 1 de 19
+[DEBUG   - 2019-04-06 23:08:33,898] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-06 23:08:36,540] GoogleDriver.search - Mudando a localizacao para Los Angeles (us-west2). 2 de 19
+[DEBUG   - 2019-04-06 23:11:58,507] GoogleDriver.search - Mudando a localizacao para Iowa (us-central1). 1 de 19
+[DEBUG   - 2019-04-06 23:12:55,713] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-06 23:13:00,167] GoogleDriver.search - Mudando a localizacao para Los Angeles (us-west2). 2 de 19
+[DEBUG   - 2019-04-06 23:15:55,441] GoogleDriver.search - Mudando a localizacao para Iowa (us-central1). 1 de 19
+[DEBUG   - 2019-04-06 23:16:53,909] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-06 23:16:57,454] GoogleDriver.search - Mudando a localizacao para Los Angeles (us-west2). 2 de 19
+[DEBUG   - 2019-04-06 23:17:52,818] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-06 23:17:56,938] GoogleDriver.search - Mudando a localizacao para Oregon (us-west1). 3 de 19
+[DEBUG   - 2019-04-06 23:18:52,776] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-06 23:18:56,009] GoogleDriver.search - Mudando a localizacao para Northern Virginia (us-east4). 4 de 19
+[DEBUG   - 2019-04-06 23:19:51,865] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-06 23:19:55,387] GoogleDriver.search - Mudando a localizacao para South Carolina (us-east1). 5 de 19
+[DEBUG   - 2019-04-06 23:20:51,079] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-06 23:20:55,542] GoogleDriver.search - Mudando a localizacao para Montreal (northamerica-northeast1). 6 de 19
+[DEBUG   - 2019-04-06 23:21:51,388] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-06 23:21:55,823] GoogleDriver.search - Mudando a localizacao para Sao Paulo (southamerica-east1). 7 de 19
+[DEBUG   - 2019-04-06 23:22:51,590] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-06 23:22:55,501] GoogleDriver.search - Mudando a localizacao para Belgium (europe-west1). 8 de 19
+[DEBUG   - 2019-04-06 23:23:50,925] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-06 23:23:55,166] GoogleDriver.search - Mudando a localizacao para Finland (europe-north1). 9 de 19
+[DEBUG   - 2019-04-06 23:24:50,623] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-06 23:24:54,663] GoogleDriver.search - Mudando a localizacao para Frankfurt (europe-west3). 10 de 19
+[DEBUG   - 2019-04-06 23:25:50,240] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-06 23:25:53,740] GoogleDriver.search - Mudando a localizacao para London (europe-west2). 11 de 19
+[DEBUG   - 2019-04-06 23:26:49,088] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-06 23:26:53,073] GoogleDriver.search - Mudando a localizacao para Netherlands (europe-west4). 12 de 19
+[DEBUG   - 2019-04-06 23:27:48,637] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-06 23:27:51,270] GoogleDriver.search - Mudando a localizacao para Zurich (europe-west6). 13 de 19
+[DEBUG   - 2019-04-06 23:28:43,795] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-06 23:28:47,145] GoogleDriver.search - Mudando a localizacao para Mumbai (asia-south1). 14 de 19
+[DEBUG   - 2019-04-06 23:29:42,983] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-06 23:29:46,532] GoogleDriver.search - Mudando a localizacao para Singapore (asia-southeast1). 15 de 19
+[DEBUG   - 2019-04-06 23:30:42,541] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-06 23:30:46,414] GoogleDriver.search - Mudando a localizacao para Sydney (australia-southeast1). 16 de 19
+[DEBUG   - 2019-04-06 23:31:42,921] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-06 23:31:47,170] GoogleDriver.search - Mudando a localizacao para Hong Kong (asia-east2). 17 de 19
+[DEBUG   - 2019-04-06 23:32:43,677] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-06 23:32:46,412] GoogleDriver.search - Mudando a localizacao para Taiwan (asia-east1). 18 de 19
+[DEBUG   - 2019-04-06 23:33:42,756] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-06 23:33:47,630] GoogleDriver.search - Mudando a localizacao para Tokyo (asia-northeast1). 19 de 19
+[DEBUG   - 2019-04-06 23:34:43,924] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-06 23:36:37,222] OracleDriver.search - Mudando a localizacao para default. 1 de 1
+[DEBUG   - 2019-04-06 23:36:37,225] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-06 23:38:20,281] OracleDriver.search - Mudando a localizacao para default. 1 de 1
+[DEBUG   - 2019-04-06 23:38:22,609] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-06 23:40:54,262] OracleDriver.search - Mudando a localizacao para default. 1 de 1
+[DEBUG   - 2019-04-06 23:40:54,265] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 00:02:43,344] OracleDriver.search - Mudando a localizacao para default. 1 de 1
+[DEBUG   - 2019-04-07 00:02:43,348] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 00:09:42,427] OracleDriver.search - Mudando a localizacao para default. 1 de 1
+[DEBUG   - 2019-04-07 00:09:42,429] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 00:31:52,546] OracleDriver.search - Mudando a localizacao para default. 1 de 1
+[DEBUG   - 2019-04-07 00:31:52,548] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 00:32:59,100] OracleDriver.search - Mudando a localizacao para default. 1 de 1
+[DEBUG   - 2019-04-07 00:32:59,102] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 00:39:51,671] OracleDriver.search - Mudando a localizacao para default. 1 de 1
+[DEBUG   - 2019-04-07 00:39:51,675] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 02:30:06,296] OracleDriver.search - Mudando a localizacao para default. 1 de 1
+[DEBUG   - 2019-04-07 02:30:06,298] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 02:43:56,724] OracleDriver.search - Mudando a localizacao para default. 1 de 1
+[DEBUG   - 2019-04-07 02:43:56,725] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 02:44:36,864] OracleDriver.search - Mudando a localizacao para default. 1 de 1
+[DEBUG   - 2019-04-07 02:44:36,869] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 02:59:33,886] OracleDriver.search - Mudando a localizacao para default. 1 de 1
+[DEBUG   - 2019-04-07 02:59:33,888] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 12:06:34,854] OracleDriver.search - Mudando a localizacao para default. 1 de 1
+[DEBUG   - 2019-04-07 12:06:34,856] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 12:10:24,753] OracleDriver.search - Mudando a localizacao para default. 1 de 1
+[DEBUG   - 2019-04-07 12:10:24,755] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 12:32:33,276] OracleDriver.search - Mudando a localizacao para default. 1 de 1
+[DEBUG   - 2019-04-07 12:32:33,277] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 12:33:13,566] OracleDriver.search - Mudando a localizacao para default. 1 de 1
+[DEBUG   - 2019-04-07 12:33:13,567] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 12:35:33,288] OracleDriver.search - Mudando a localizacao para default. 1 de 1
+[DEBUG   - 2019-04-07 12:35:33,290] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 12:45:48,459] OracleDriver.search - Mudando a localizacao para default. 1 de 1
+[DEBUG   - 2019-04-07 12:45:48,461] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 12:49:33,753] OracleDriver.search - Mudando a localizacao para default. 1 de 1
+[DEBUG   - 2019-04-07 12:49:33,755] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 12:50:16,119] OracleDriver.search - Mudando a localizacao para default. 1 de 1
+[DEBUG   - 2019-04-07 12:50:16,121] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:29:24,070] AzureDriver.get - Iniciando processamento dos dados da azure.
+[ERROR   - 2019-04-07 13:29:26,028] AzureDriver.get - Erro ao buscar os dados da azure: This event loop is already running
+[DEBUG   - 2019-04-07 13:29:26,073] GoogleDriver.get - Iniciando processamento dos dados da google.
+[ERROR   - 2019-04-07 13:29:27,614] GoogleDriver.get - Erro ao buscar os dados da google: Protocol error Target.createTarget: Target closed.
+[DEBUG   - 2019-04-07 13:29:27,631] AlibabaDriver.get - Iniciando processamento dos dados da alibaba.
+[DEBUG   - 2019-04-07 13:29:34,744] AzureDriver.get - Iniciando processamento dos dados da azure.
+[DEBUG   - 2019-04-07 13:29:49,837] AzureDriver.get - Iniciando processamento dos dados da azure.
+[DEBUG   - 2019-04-07 13:29:56,492] AzureDriver.search - Mudando a localizacao para Central US. 1 de 40
+[DEBUG   - 2019-04-07 13:29:56,881] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:29:58,780] AzureDriver.search - Mudando a localizacao para East US. 2 de 40
+[DEBUG   - 2019-04-07 13:29:59,342] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:30:01,494] AzureDriver.search - Mudando a localizacao para East US 2. 3 de 40
+[DEBUG   - 2019-04-07 13:30:01,976] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:30:04,058] AzureDriver.search - Mudando a localizacao para North Central US. 4 de 40
+[DEBUG   - 2019-04-07 13:30:04,613] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:30:06,384] AzureDriver.search - Mudando a localizacao para South Central US. 5 de 40
+[DEBUG   - 2019-04-07 13:30:06,857] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:30:08,883] AzureDriver.search - Mudando a localizacao para West Central US. 6 de 40
+[DEBUG   - 2019-04-07 13:30:09,347] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:30:10,855] AzureDriver.search - Mudando a localizacao para West US. 7 de 40
+[DEBUG   - 2019-04-07 13:30:11,311] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:30:13,323] AzureDriver.search - Mudando a localizacao para West US 2. 8 de 40
+[DEBUG   - 2019-04-07 13:30:13,851] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:30:16,218] AzureDriver.search - Mudando a localizacao para North Europe. 9 de 40
+[DEBUG   - 2019-04-07 13:30:16,663] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:30:18,838] AzureDriver.search - Mudando a localizacao para West Europe. 10 de 40
+[DEBUG   - 2019-04-07 13:30:19,323] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:30:21,820] AzureDriver.search - Mudando a localizacao para East Asia. 11 de 40
+[DEBUG   - 2019-04-07 13:30:22,269] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:30:24,308] AzureDriver.search - Mudando a localizacao para Southeast Asia. 12 de 40
+[DEBUG   - 2019-04-07 13:30:24,783] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:30:27,257] AzureDriver.search - Mudando a localizacao para Japan East. 13 de 40
+[DEBUG   - 2019-04-07 13:30:27,682] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:30:30,067] AzureDriver.search - Mudando a localizacao para Japan West. 14 de 40
+[DEBUG   - 2019-04-07 13:30:30,529] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:30:32,625] AzureDriver.search - Mudando a localizacao para Brazil South. 15 de 40
+[DEBUG   - 2019-04-07 13:30:33,035] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:30:35,029] AzureDriver.search - Mudando a localizacao para Australia Central. 16 de 40
+[DEBUG   - 2019-04-07 13:30:35,494] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:30:37,638] AzureDriver.search - Mudando a localizacao para Australia Central 2. 17 de 40
+[DEBUG   - 2019-04-07 13:30:38,043] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:30:40,125] AzureDriver.search - Mudando a localizacao para Australia East. 18 de 40
+[DEBUG   - 2019-04-07 13:30:40,604] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:30:43,027] AzureDriver.search - Mudando a localizacao para Australia Southeast. 19 de 40
+[DEBUG   - 2019-04-07 13:30:43,454] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:30:45,589] AzureDriver.search - Mudando a localizacao para Central India. 20 de 40
+[DEBUG   - 2019-04-07 13:30:46,092] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:30:48,377] AzureDriver.search - Mudando a localizacao para South India. 21 de 40
+[DEBUG   - 2019-04-07 13:30:48,789] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:30:50,939] AzureDriver.search - Mudando a localizacao para West India. 22 de 40
+[DEBUG   - 2019-04-07 13:30:51,383] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:30:53,390] AzureDriver.search - Mudando a localizacao para Canada Central. 23 de 40
+[DEBUG   - 2019-04-07 13:30:53,856] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:30:56,151] AzureDriver.search - Mudando a localizacao para Canada East. 24 de 40
+[DEBUG   - 2019-04-07 13:30:56,614] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:30:58,931] AzureDriver.search - Mudando a localizacao para Germany Central. 25 de 40
+[DEBUG   - 2019-04-07 13:30:59,332] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:31:01,342] AzureDriver.search - Mudando a localizacao para Germany Northeast. 26 de 40
+[DEBUG   - 2019-04-07 13:31:01,762] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:31:03,710] AzureDriver.search - Mudando a localizacao para UK South. 27 de 40
+[DEBUG   - 2019-04-07 13:31:04,165] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:31:06,625] AzureDriver.search - Mudando a localizacao para UK West. 28 de 40
+[DEBUG   - 2019-04-07 13:31:07,079] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:31:09,140] AzureDriver.search - Mudando a localizacao para France Central. 29 de 40
+[DEBUG   - 2019-04-07 13:31:09,547] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:31:11,617] AzureDriver.search - Mudando a localizacao para France South. 30 de 40
+[DEBUG   - 2019-04-07 13:31:12,037] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:31:14,097] AzureDriver.search - Mudando a localizacao para Korea Central. 31 de 40
+[DEBUG   - 2019-04-07 13:31:14,542] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:31:16,789] AzureDriver.search - Mudando a localizacao para Korea South. 32 de 40
+[DEBUG   - 2019-04-07 13:31:17,257] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:31:19,415] AzureDriver.search - Mudando a localizacao para US DoD Central. 33 de 40
+[DEBUG   - 2019-04-07 13:31:19,824] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:31:20,959] AzureDriver.search - Mudando a localizacao para US DoD East. 34 de 40
+[DEBUG   - 2019-04-07 13:31:21,345] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:31:22,518] AzureDriver.search - Mudando a localizacao para US Gov Arizona. 35 de 40
+[DEBUG   - 2019-04-07 13:31:22,990] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:31:25,232] AzureDriver.search - Mudando a localizacao para US Gov Iowa. 36 de 40
+[DEBUG   - 2019-04-07 13:31:25,704] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:31:26,960] AzureDriver.search - Mudando a localizacao para US Gov Texas. 37 de 40
+[DEBUG   - 2019-04-07 13:31:27,398] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:31:29,418] AzureDriver.search - Mudando a localizacao para US Gov Virginia. 38 de 40
+[DEBUG   - 2019-04-07 13:31:29,902] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:31:32,237] AzureDriver.search - Mudando a localizacao para South Africa North. 39 de 40
+[DEBUG   - 2019-04-07 13:31:32,666] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:31:34,601] AzureDriver.search - Mudando a localizacao para South Africa West. 40 de 40
+[DEBUG   - 2019-04-07 13:31:35,005] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:31:37,050] MongoDAO.insert - Adicionando dados da azure ao banco de dados.
+[DEBUG   - 2019-04-07 13:31:37,169] GoogleDriver.get - Iniciando processamento dos dados da google.
+[DEBUG   - 2019-04-07 13:31:45,772] GoogleDriver.search - Mudando a localizacao para Iowa (us-central1). 1 de 19
+[DEBUG   - 2019-04-07 13:32:39,991] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:32:41,146] GoogleDriver.search - Mudando a localizacao para Los Angeles (us-west2). 2 de 19
+[DEBUG   - 2019-04-07 13:33:33,197] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:33:34,433] GoogleDriver.search - Mudando a localizacao para Oregon (us-west1). 3 de 19
+[DEBUG   - 2019-04-07 13:34:26,566] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:34:27,691] GoogleDriver.search - Mudando a localizacao para Northern Virginia (us-east4). 4 de 19
+[DEBUG   - 2019-04-07 13:35:18,725] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:35:19,809] GoogleDriver.search - Mudando a localizacao para South Carolina (us-east1). 5 de 19
+[DEBUG   - 2019-04-07 13:36:12,031] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:36:13,248] GoogleDriver.search - Mudando a localizacao para Montreal (northamerica-northeast1). 6 de 19
+[DEBUG   - 2019-04-07 13:37:05,570] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:37:06,850] GoogleDriver.search - Mudando a localizacao para Sao Paulo (southamerica-east1). 7 de 19
+[DEBUG   - 2019-04-07 13:37:59,192] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:38:00,416] GoogleDriver.search - Mudando a localizacao para Belgium (europe-west1). 8 de 19
+[DEBUG   - 2019-04-07 13:38:52,878] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:38:54,131] GoogleDriver.search - Mudando a localizacao para Finland (europe-north1). 9 de 19
+[DEBUG   - 2019-04-07 13:39:46,349] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:39:47,470] GoogleDriver.search - Mudando a localizacao para Frankfurt (europe-west3). 10 de 19
+[DEBUG   - 2019-04-07 13:40:39,863] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:40:41,063] GoogleDriver.search - Mudando a localizacao para London (europe-west2). 11 de 19
+[DEBUG   - 2019-04-07 13:41:33,323] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:41:34,470] GoogleDriver.search - Mudando a localizacao para Netherlands (europe-west4). 12 de 19
+[DEBUG   - 2019-04-07 13:42:26,878] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:42:28,219] GoogleDriver.search - Mudando a localizacao para Zurich (europe-west6). 13 de 19
+[DEBUG   - 2019-04-07 13:43:17,133] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:43:18,181] GoogleDriver.search - Mudando a localizacao para Mumbai (asia-south1). 14 de 19
+[DEBUG   - 2019-04-07 13:44:09,426] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:44:10,493] GoogleDriver.search - Mudando a localizacao para Singapore (asia-southeast1). 15 de 19
+[DEBUG   - 2019-04-07 13:45:02,820] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:45:04,005] GoogleDriver.search - Mudando a localizacao para Sydney (australia-southeast1). 16 de 19
+[DEBUG   - 2019-04-07 13:45:56,405] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:45:57,639] GoogleDriver.search - Mudando a localizacao para Hong Kong (asia-east2). 17 de 19
+[DEBUG   - 2019-04-07 13:46:49,899] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:46:51,009] GoogleDriver.search - Mudando a localizacao para Taiwan (asia-east1). 18 de 19
+[DEBUG   - 2019-04-07 13:47:43,441] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:47:44,747] GoogleDriver.search - Mudando a localizacao para Tokyo (asia-northeast1). 19 de 19
+[DEBUG   - 2019-04-07 13:48:37,048] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:48:38,328] MongoDAO.insert - Adicionando dados da google ao banco de dados.
+[DEBUG   - 2019-04-07 13:48:38,389] AlibabaDriver.get - Iniciando processamento dos dados da alibaba.
+[DEBUG   - 2019-04-07 13:48:50,748] MongoDAO.insert - Adicionando dados da alibaba ao banco de dados.
+[DEBUG   - 2019-04-07 13:48:50,821] OracleDriver.get - Iniciando processamento dos dados da oracle.
+[DEBUG   - 2019-04-07 13:49:08,961] OracleDriver.search - Mudando a localizacao para default. 1 de 1
+[DEBUG   - 2019-04-07 13:49:08,961] NoneType.get_tables - Buscando dados das tabelas
+[DEBUG   - 2019-04-07 13:49:09,493] MongoDAO.insert - Adicionando dados da oracle ao banco de dados.

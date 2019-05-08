@@ -6,6 +6,8 @@ from itertools import cycle
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from sshtunnel import SSHTunnelForwarder
+import plotly.offline as py
+import plotly.graph_objs as go
 
 
 def main():
