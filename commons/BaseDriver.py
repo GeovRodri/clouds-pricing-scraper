@@ -25,5 +25,5 @@ class BaseDriver:
         raise NotImplementedError()
 
     def save_json(self):
-        mongo = MongoDAO(self.collection_name)
-        mongo.insert(self.columns)
+        mongo = MongoDAO()
+        mongo.insert(self.collection_name, self.columns)
