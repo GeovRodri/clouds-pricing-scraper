@@ -15,3 +15,26 @@ $ pip install -r requirements.txt
 ```
 $ python cli.py [all, azure, google, alibaba, oracle, aws]
 ```
+
+### Iniciando API
+```
+$ python app.py
+```
+
+#### Realizando chamada para a API
+```
+{
+	"select": {
+		"aws": ["memory", "vcpu", "processorFeatures", "processorArchitecture", "pricing"]
+	},
+	"filters": {
+		"aws": [
+			{"field": "vcpu", "comparator": "==", "value": 4}, 
+			{"field": "memory", "comparator": "==", "value": 8},
+			{"field": "processorArchitecture", "comparator": "==", "value":  "64-bit"},
+			{"field": "pricing", "comparator": "<=", "value": "0.162"},
+			{"field": "region", "comparator": "==", "value": "US West (Oregon)"}
+		]
+	}
+}
+```
