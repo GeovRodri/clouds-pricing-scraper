@@ -47,15 +47,44 @@ class Prices(Resource):
 
                     if 'pricing' in field:
                         field_data = self.extract_pricing(field_data)
+                        # O filtro de região tem que ser realizada junto a de preço
+                        filters_field = filters_field + [x for x in filters if x["field"] == 'region']
 
                     for filter_field in filters_field:
                         comparator = filter_field["comparator"]
-                        field_comparator = "'" + field_data + "'"
+                        field_comparator = ''
+                        value_filter = filter_field["value"]
 
-                        if str(filter_field["value"]).isnumeric():
+                        if isinstance(field_data, list) is False:
+                            field_comparator = "'" + str(field_data) + "'"
+
+                        # Removendo . caso seja um número decimal
+                        if str(value_filter).replace('.', '').isnumeric():
                             field_comparator = Utils.only_numbers(field_comparator)
+                        else:
+                            # Se não for um número, adicionar " para considerar como string na hora do eval
+                            value_filter = '"' + value_filter + '"'
 
-                        if eval("{} {} {}".format(field_comparator, comparator, filter_field["value"])) is False:
+                        # Realizando o filtro por preço
+                        if 'pricing' in field:
+                            prices = []
+
+                            for price_obj in field_data:
+                                item_comparator = price_obj['price']
+
+                                if filter_field["field"] == 'region':
+                                    item_comparator = '"' + price_obj['region'] + '"'
+
+                                if eval("{} {} {}".format(item_comparator, comparator, value_filter)):
+                                    prices.append(price_obj)
+
+                            if len(prices) == 0:
+                                remove_machine = True
+
+                            field_data = prices
+                            continue
+
+                        if eval("{} {} {}".format(field_comparator, comparator, value_filter)) is False:
                             remove_machine = True
 
                     if remove_machine is True:
@@ -70,17 +99,18 @@ class Prices(Resource):
         return result
 
     def extract_pricing(self, field_data):
-        pricing_obj = {}
+        pricing_obj = []
         for price_key in field_data:
             price_obj = field_data[price_key]
-            pricing_obj[price_key] = {}
 
             if isinstance(price_obj, dict):
                 for type_price_key in price_obj:
                     type_price = price_obj[type_price_key]
-                    pricing_obj[price_key][type_price_key] = Utils.get_price(type_price)
+                    price = Utils.get_price(type_price)
+                    pricing_obj.append({"region": price_key, "type": type_price_key, "price": price})
             else:
-                pricing_obj[price_key]['price'] = Utils.get_price(price_obj)
+                price = Utils.get_price(price_obj)
+                pricing_obj.append({"region": price_key, "type": "price", "price": price})
 
         return pricing_obj
 

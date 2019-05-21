@@ -1,9 +1,6 @@
 import datetime
-
 import pymongo
 from pymongo import MongoClient
-from sshtunnel import SSHTunnelForwarder
-
 from commons.Log import Log
 
 
