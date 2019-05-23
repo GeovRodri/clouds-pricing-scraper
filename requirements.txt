@@ -3,7 +3,6 @@ ijson
 pymongo
 unidecode
 requests-html
-websockets==6.0
 sshtunnel
 matplotlib
 numpy
