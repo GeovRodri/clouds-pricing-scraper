@@ -37,65 +37,42 @@ class Prices(Resource):
 
             del last_data['_id']
             for machine_key in last_data:
-                item = {}
-                machine = last_data[machine_key]
                 remove_machine = False
+                machine = last_data[machine_key]
+                item, general_configurations, price_configurations = {}, {}, []
 
+                """ Montando o objeto """
                 for field_list in fields:
                     field_split = str(field_list).split('.')
                     field = field_split[0]
                     field_data = machine.get(field, None)
-                    filters_field = [x for x in filters if x["field"] == field]
 
                     if 'pricing' in field:
-                        field_data = self.extract_pricing(field_data, field_split[1])
-                        # O filtro de região tem que ser realizada junto a de preço
-                        filters_field = filters_field + [x for x in filters if x["field"] == 'region']
+                        price_configurations = self.extract_pricing(field_data, field_split[1])
 
-                    for filter_field in filters_field:
-                        comparator = filter_field["comparator"]
-                        field_comparator = ''
-                        value_filter = filter_field["value"]
+                item = [{**general_configurations, **x} for x in price_configurations]
 
-                        if isinstance(field_data, list) is False:
-                            field_comparator = "'" + str(field_data) + "'"
+                """ Realizando a filtragem dos resultados """
+                for filter_obj in filters:
+                    field_filter = filter_obj["field"]
+                    comparator = filter_obj["comparator"]
+                    value_filter = filter_obj["value"]
 
-                        # Removendo . caso seja um número decimal
-                        if str(value_filter).replace('.', '').isnumeric():
-                            field_comparator = Utils.only_numbers(field_comparator)
-                        else:
-                            # Se não for um número, adicionar " para considerar como string na hora do eval
-                            value_filter = '"' + value_filter + '"'
+                    field_data = "'" + item.get(field_filter, None) + "'"
 
-                        # Realizando o filtro por preço
-                        if 'pricing' in field:
-                            prices = []
+                    # Removendo . caso seja um número decimal
+                    if str(value_filter).replace('.', '').isnumeric():
+                        field_data = Utils.only_numbers(field_data)
+                    else:
+                        # Se não for um número, adicionar " para considerar como string na hora do eval
+                        value_filter = '"' + value_filter + '"'
 
-                            for price_obj in field_data:
-                                item_comparator = price_obj['price']
-
-                                if filter_field["field"] == 'region':
-                                    item_comparator = '"' + price_obj['region'] + '"'
-
-                                if eval("{} {} {}".format(item_comparator, comparator, value_filter)):
-                                    prices.append(price_obj)
-
-                            if len(prices) == 0:
-                                remove_machine = True
-
-                            field_data = prices
-                            continue
-
-                        if eval("{} {} {}".format(field_comparator, comparator, value_filter)) is False:
-                            remove_machine = True
-
-                    if remove_machine is True:
-                        break
-
-                    item[field] = field_data
+                    if eval("{} {} {}".format(field_data, comparator, value_filter)) is False:
+                        remove_machine = True
 
                 if remove_machine is False:
                     items[machine_key] = item
+
             result[collection_name] = items
 
         return result
