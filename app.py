@@ -41,12 +41,14 @@ class Prices(Resource):
                 machine = last_data[machine_key]
                 remove_machine = False
 
-                for field in fields:
+                for field_list in fields:
+                    field_split = str(field_list).split('.')
+                    field = field_split[0]
                     field_data = machine.get(field, None)
                     filters_field = [x for x in filters if x["field"] == field]
 
                     if 'pricing' in field:
-                        field_data = self.extract_pricing(field_data)
+                        field_data = self.extract_pricing(field_data, field_split[1])
                         # O filtro de região tem que ser realizada junto a de preço
                         filters_field = filters_field + [x for x in filters if x["field"] == 'region']
 
@@ -98,19 +100,18 @@ class Prices(Resource):
 
         return result
 
-    def extract_pricing(self, field_data):
+    def extract_pricing(self, field_data, field_name):
         pricing_obj = []
         for price_key in field_data:
             price_obj = field_data[price_key]
 
             if isinstance(price_obj, dict):
-                for type_price_key in price_obj:
-                    type_price = price_obj[type_price_key]
-                    price = Utils.get_price(type_price)
-                    pricing_obj.append({"region": price_key, "type": type_price_key, "price": price})
+                type_price = price_obj[field_name]
+                price = Utils.get_price(type_price)
+                pricing_obj.append({"region": price_key, "price": price})
             else:
                 price = Utils.get_price(price_obj)
-                pricing_obj.append({"region": price_key, "type": "price", "price": price})
+                pricing_obj.append({"region": price_key, "price": price})
 
         return pricing_obj
 
