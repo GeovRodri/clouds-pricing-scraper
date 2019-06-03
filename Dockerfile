@@ -18,5 +18,5 @@ COPY . /app
 RUN pip3 install --upgrade pip setuptools
 RUN pip3 install uwsgi
 RUN pip3 install -r /app/requirements.txt
-EXPOSE 80
+EXPOSE 8080
 CMD ["uwsgi", "--plugin", "python3", "--ini", "/app/wsgi.ini"]
