@@ -1,4 +1,4 @@
-from wtforms import Form, FieldList, StringField, validators, FormField, Field
+from wtforms import Form, FieldList, StringField, validators, FormField, Field, IntegerField
 
 
 class CloudSelectForm(Form):
@@ -15,14 +15,8 @@ class CloudFilter(Form):
     value = Field(validators=[validators.DataRequired()])
 
 
-class CloudFiltersForm(Form):
-    aws = FieldList(FormField(CloudFilter))
-    oracle = FieldList(FormField(CloudFilter))
-    alibaba = FieldList(FormField(CloudFilter))
-    azure = FieldList(FormField(CloudFilter))
-    google = FieldList(FormField(CloudFilter))
-
-
 class FindCloudsForm(Form):
     select = FormField(CloudSelectForm)
-    filters = FormField(CloudFiltersForm)
+    labels = FieldList(StringField(validators=[validators.DataRequired()]))
+    filters = FieldList(FormField(CloudFilter))
+    limit = IntegerField()

@@ -21,20 +21,73 @@ $ python cli.py [all, azure, google, alibaba, oracle, aws]
 $ python app.py
 ```
 
-#### Realizando chamada para a API
+#### Exemplo de chamada para a API via POST
+Body
 ```
 {
 	"select": {
-		"aws": ["memory", "vcpu", "processorFeatures", "processorArchitecture", "pricing"]
+		"aws": ["memory", "vcpu", "pricing.price"],
+		"azure": ["RAM", "vCPU", "pricing.Pay as you go"]
 	},
-	"filters": {
-		"aws": [
-			{"field": "vcpu", "comparator": "==", "value": 4}, 
-			{"field": "memory", "comparator": "==", "value": 8},
-			{"field": "processorArchitecture", "comparator": "==", "value":  "64-bit"},
-			{"field": "pricing", "comparator": "<=", "value": "0.162"},
-			{"field": "region", "comparator": "==", "value": "US West (Oregon)"}
-		]
-	}
+	"labels": ["Memoria", "CPU", "Preço"],
+	"filters": [
+		{"field": "CPU", "comparator": "==", "value": 4} 
+	],
+	"limit": 5
 }
+```
+Retorno
+```
+[
+    {
+        "type": "i2.xlarge",
+        "cloud": "aws",
+        "Memoria": "30.5 GiB",
+        "CPU": "4",
+        "Preço": {
+            "region": "South America (Sao Paulo)",
+            "price": 0.02
+        }
+    },
+    {
+        "type": "m2.2xlarge",
+        "cloud": "aws",
+        "Memoria": "34.2 GiB",
+        "CPU": "4",
+        "Preço": {
+            "region": "US West (Oregon)",
+            "price": 0.025
+        }
+    },
+    {
+        "type": "m1.xlarge",
+        "cloud": "aws",
+        "Memoria": "15 GiB",
+        "CPU": "4",
+        "Preço": {
+            "region": "US West (N. California)",
+            "price": 0.05
+        }
+    },
+    {
+        "type": "B4MS",
+        "cloud": "azure",
+        "Memoria": "16 GiB",
+        "CPU": "4",
+        "Preço": {
+            "region": "Germany Central",
+            "price": 0.1175
+        }
+    },
+    {
+        "type": "B4MS",
+        "cloud": "azure",
+        "Memoria": "16 GiB",
+        "CPU": "4",
+        "Preço": {
+            "region": "Germany Northeast",
+            "price": 0.1175
+        }
+    }
+]
 ```
