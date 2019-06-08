@@ -93,6 +93,10 @@ class Prices(Resource):
 
     def extract_pricing(self, field_data, field_name):
         pricing_obj = []
+
+        if field_data is None:
+            return []
+
         for price_key in field_data:
             price_obj = field_data[price_key]
 
