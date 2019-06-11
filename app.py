@@ -56,12 +56,8 @@ class Prices(Resource):
         items.sort(key=lambda elem: elem[price_label]['price'])
 
         """ Realizando a filtragem dos resultados """
-        list_filtered = []
-        has_filter = False
-
         for filter_obj in filters:
-            items_to_remove = []
-            has_filter = True
+            list_filtered = []
 
             for item in items:
                 field_filter = filter_obj["field"]
@@ -80,10 +76,6 @@ class Prices(Resource):
                 if eval("{} {} {}".format(field_data, comparator, value_filter)) is True:
                     list_filtered.append(item)
 
-            for item in items_to_remove:
-                del items[item]
-
-        if has_filter is True:
             items = list_filtered
 
         if limit is not None:
