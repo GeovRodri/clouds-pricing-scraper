@@ -8,7 +8,7 @@ class MongoDAO:
     database = None
 
     def __init__(self):
-        client = MongoClient('localhost', 27017)
+        client = MongoClient('localhost', 27017, connect=False)
         self.database = client['clouds-price']
 
     def insert(self, collection_name, columns):
