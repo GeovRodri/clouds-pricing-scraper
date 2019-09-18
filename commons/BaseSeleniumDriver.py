@@ -75,7 +75,18 @@ class BaseSeleniumDriver(BaseDriver):
                     if text_th not in self.columns[key]:
                         self.columns[key][text_th] = {}
 
-                    self.columns[key][text_th] = td.text
+                    value = td.text
+
+                    # Removendo parte dos valores que contém / para maquinas da azure
+                    # Algumas máquina vem com um valor de cpu diferente, como por exemplo 2 / 4,
+                    # nesses casos vamos considerar apenas o 2
+                    if self.collection_name == 'azure':
+                        items = str(td.text).split('/')
+                        value = items[0]
+                        if len(items) > 1:
+                            Log.debug('Removendo parte do valor de ' + td.text + ' valor agora sera: ' + value)
+
+                    self.columns[key][text_th] = value
 
     def after_load_url(self):
         pass
