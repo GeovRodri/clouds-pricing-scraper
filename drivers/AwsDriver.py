@@ -21,6 +21,7 @@ class AwsDriver(BaseDriver):
         location = None
         instance_type = None
         sku = None
+        operating_system = None
         attributes = {}
 
         for prefix, event, value in pages:
@@ -36,14 +37,16 @@ class AwsDriver(BaseDriver):
                 elif 'instanceType' == last_key:
                     instance_type = value
                     attributes['pricing'] = {}
+                elif 'operatingSystem' == last_key:
+                    operating_system = value
                 elif 'sku' == last_key:
                     """ Ao trocar o sku reiniciar todas as variaveis e inserir os atributos ao dicionario """
-                    if sku is not None and sku != value and instance_type is not None:
+                    if sku is not None and sku != value and instance_type is not None and operating_system == 'Linux':
                         self.columns[instance_type] = attributes
                         location = None
                         instance_type = None
-                        attributes = {}
-
+                    
+                    attributes = {}
                     sku = value
 
                 if sku is not None and location is not None and instance_type is not None:
