@@ -57,13 +57,20 @@ class BaseDriver:
 
             for x in self.columns[item].get('pricing', []):
                 if self.collection_name == 'azure':
-                    del obj['Pay as you go']
-                    del obj['One year reserved\n(% Savings)']
-                    del obj['Three year reserved\n(% Savings)']
-                    
-                    obj[x] = self.columns[item]['pricing'][x].get('Pay as you go', None)
+                    if 'Pay as you go' in obj:
+                        del obj['Pay as you go']
+
+                    if 'One year reserved\n(% Savings)' in obj:
+                        del obj['One year reserved\n(% Savings)']
+
+                    if 'Three year reserved\n(% Savings)' in obj:
+                        del obj['Three year reserved\n(% Savings)']
+
+                    if 'Pay as you go' in self.columns[item]['pricing'][x]:
+                        obj[x] = self.columns[item]['pricing'][x].get('Pay as you go', None)
                 elif self.collection_name == 'google':
-                    obj[x] = self.columns[item]['pricing'][x].get('Preço (US$)', None)
+                    if 'Preço (US$)' in self.columns[item]['pricing'][x]:
+                        obj[x] = self.columns[item]['pricing'][x].get('Preço (US$)', None)
                 else:
                     obj[x] = self.columns[item]['pricing'][x]
 
