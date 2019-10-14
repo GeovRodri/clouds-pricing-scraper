@@ -1,3 +1,5 @@
+import csv
+
 from commons.Log import Log
 from daos.MongoDAO import MongoDAO
 
@@ -25,5 +27,53 @@ class BaseDriver:
         raise NotImplementedError()
 
     def save_json(self):
-        mongo = MongoDAO()
-        mongo.insert(self.collection_name, self.columns)
+        # mongo = MongoDAO()
+        # mongo.insert(self.collection_name, self.columns)
+        locations = []
+        instances = []
+        headers = []
+        for item in self.columns:
+            if self.collection_name == 'aws':
+                obj = {
+                    'Instance Type': self.columns[item].get('instanceType', None),
+                    'vCPU': self.columns[item].get('vcpu', None),
+                    'Memory (GiB)': self.columns[item].get('memory', None),
+                    'Storage (GB)': self.columns[item].get('storage', None),
+                    'Networking Performance': self.columns[item].get('networkPerformance', None),
+                    'Physical Processor': self.columns[item].get('physicalProcessor', None),
+                    'Clock Speed (GHz)': self.columns[item].get('clockSpeed', None),
+                    'Intel AVX': self.columns[item].get('intelAvxAvailable', '-'),
+                    'Intel AVX2': self.columns[item].get('intelAvx2Available', '-'),
+                    'Intel Turbo': self.columns[item].get('intelTurboAvailable', '-'),
+                    'EBS OPT': self.columns[item].get('ebsOptimized', '-'),
+                    'Enhanced Network': self.columns[item].get('enhancedNetworkingSupported', '-')
+                }
+            else:
+                obj = self.columns[item]
+                del obj['pricing']
+
+            headers = list(set(headers) | set(obj.keys()))
+
+            for x in self.columns[item].get('pricing', []):
+                if self.collection_name == 'azure':
+                    obj[x] = self.columns[item]['pricing'][x]['PAY AS YOU GO']
+                elif self.collection_name == 'google':
+                    obj[x] = self.columns[item]['pricing'][x]['Preço (US$)']
+                else:
+                    obj[x] = self.columns[item]['pricing'][x]
+
+                exists = [y for y in locations if y['name'] == x]
+                if len(exists) == 0:
+                    locations.append({'name': x})
+
+            instances.append(obj)
+
+        with open(f'{self.collection_name}_Regions.csv', 'w', newline='', encoding='utf-8') as f:  # Just use 'w' mode in 3.x
+            w = csv.DictWriter(f, fieldnames=list(locations[0].keys()), delimiter=';')
+            w.writeheader()
+            w.writerows(locations)
+
+        with open(f'{self.collection_name}.csv', 'w', newline='', encoding='utf-8') as f:  # Just use 'w' mode in 3.x
+            w = csv.DictWriter(f, fieldnames=headers, delimiter=';')
+            w.writeheader()
+            w.writerows(instances)
