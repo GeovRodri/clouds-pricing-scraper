@@ -36,7 +36,7 @@ class BaseDriver:
         for item in self.columns:
             if self.collection_name == 'aws':
                 obj = {
-                    'Instance Type': self.columns[item].get('instanceType', None),
+                    'Instance Type': item,
                     'vCPU': self.columns[item].get('vcpu', None),
                     'Memory (GiB)': self.columns[item].get('memory', None),
                     'Storage (GB)': self.columns[item].get('storage', None),
