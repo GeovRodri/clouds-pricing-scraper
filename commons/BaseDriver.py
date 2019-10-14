@@ -53,8 +53,6 @@ class BaseDriver:
                 obj = self.columns[item].copy()
                 del obj['pricing']
 
-            headers = list(set(headers) | set(obj.keys()))
-
             for x in self.columns[item].get('pricing', []):
                 if self.collection_name == 'azure':
                     if 'Pay as you go' in obj:
@@ -78,6 +76,7 @@ class BaseDriver:
                 if len(exists) == 0:
                     locations.append({'name': x})
 
+            headers = list(set(headers) | set(obj.keys()))
             instances.append(obj)
 
         for item in instances:
