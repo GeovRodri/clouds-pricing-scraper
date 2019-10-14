@@ -80,6 +80,11 @@ class BaseDriver:
 
             instances.append(obj)
 
+        for item in instances:
+            for header in headers:
+                if header not in item:
+                    item[header] = 'N/A'
+
         with open(f'{self.collection_name}_Regions.csv', 'w', newline='', encoding='utf-8') as f:  # Just use 'w' mode in 3.x
             w = csv.DictWriter(f, fieldnames=list(locations[0].keys()), delimiter=';')
             w.writeheader()
