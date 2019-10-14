@@ -32,6 +32,7 @@ class BaseDriver:
         locations = []
         instances = []
         headers = []
+
         for item in self.columns:
             if self.collection_name == 'aws':
                 obj = {
@@ -49,16 +50,20 @@ class BaseDriver:
                     'Enhanced Network': self.columns[item].get('enhancedNetworkingSupported', '-')
                 }
             else:
-                obj = self.columns[item]
+                obj = self.columns[item].copy()
                 del obj['pricing']
 
             headers = list(set(headers) | set(obj.keys()))
 
             for x in self.columns[item].get('pricing', []):
                 if self.collection_name == 'azure':
-                    obj[x] = self.columns[item]['pricing'][x]['PAY AS YOU GO']
+                    del obj['Pay as you go']
+                    del obj['One year reserved\n(% Savings)']
+                    del obj['Three year reserved\n(% Savings)']
+                    
+                    obj[x] = self.columns[item]['pricing'][x].get('Pay as you go', None)
                 elif self.collection_name == 'google':
-                    obj[x] = self.columns[item]['pricing'][x]['Preço (US$)']
+                    obj[x] = self.columns[item]['pricing'][x].get('Preço (US$)', None)
                 else:
                     obj[x] = self.columns[item]['pricing'][x]
 
