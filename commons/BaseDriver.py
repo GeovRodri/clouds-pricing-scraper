@@ -51,7 +51,9 @@ class BaseDriver:
                 }
             else:
                 obj = self.columns[item].copy()
-                del obj['pricing']
+
+                if 'pricing' in obj:
+                    del obj['pricing']
 
             for x in self.columns[item].get('pricing', []):
                 if self.collection_name == 'azure':
@@ -67,7 +69,7 @@ class BaseDriver:
                     if 'Pay as you go' in self.columns[item]['pricing'][x]:
                         obj[x] = self.columns[item]['pricing'][x].get('Pay as you go', None)
                 elif self.collection_name == 'google':
-                    if 'Preço (US$)' in self.columns[item]['pricing'][x]:
+                    if 'pricing' in self.columns[item] and 'Preço (US$)' in self.columns[item]['pricing'][x]:
                         obj[x] = self.columns[item]['pricing'][x].get('Preço (US$)', None)
                 else:
                     obj[x] = self.columns[item]['pricing'][x]
