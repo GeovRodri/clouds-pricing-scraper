@@ -14,12 +14,12 @@ class BaseDriver:
         self.columns = {}
 
     def get(self):
-        try:
-            Log.debug('Iniciando processamento dos dados da {}.'.format(self.collection_name))
-            self.search()
-            self.save_json()
-        except Exception as e:
-            Log.error('Erro ao buscar os dados da {}: '.format(self.collection_name) + str(e))
+        # try:
+        Log.debug('Iniciando processamento dos dados da {}.'.format(self.collection_name))
+        self.search()
+        self.save_json()
+        # except Exception as e:
+        #     Log.error('Erro ao buscar os dados da {}: '.format(self.collection_name) + str(e))
 
     def search(self):
         raise NotImplementedError()

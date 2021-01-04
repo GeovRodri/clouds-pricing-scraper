@@ -1,5 +1,6 @@
 *.py[co]
 MANIFEST
+log.txt
 
 # IDE
 .idea/

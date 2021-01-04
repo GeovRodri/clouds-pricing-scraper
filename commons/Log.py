@@ -1,10 +1,11 @@
-import os
 import logging
 import inspect
+import os
 import unidecode
 
 levelOfLog = 'DEBUG'
-
+base_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../')
+logFile = os.path.join(base_dir, 'log.txt')
 
 ##
 # Log Class provides a unique way to record log messages of this program.
@@ -25,7 +26,7 @@ class Log:
             logging.Logger.verbose = lambda inst, msg, *args, **kwargs: inst.log(logging.VERBOSE, msg, *args, **kwargs)
             logging.verbose = lambda msg, *args, **kwargs: logging.log(logging.VERBOSE, msg, *args, **kwargs)
 
-            cls.logger = logging.getLogger("wp-stay-log")
+            cls.logger = logging.getLogger("cloud-pricing-scraper-log")
 
             if log_level not in logging._nameToLevel:
                 raise Exception('Invalid file level')
@@ -35,7 +36,7 @@ class Log:
             if stream_type == "SCREEN":
                 stream = logging.StreamHandler()
             else:
-                stream = logging.FileHandler('log.txt')
+                stream = logging.FileHandler(logFile, mode='a')
 
             formatter = logging.Formatter('[%(levelname)-7s - %(asctime)s] %(message)s')
             stream.setFormatter(formatter)

@@ -46,11 +46,19 @@ class BaseSeleniumDriver(BaseDriver):
         trs_body = Chrome.find_elements_by_tag_name(tbody, "tr")
         for tr in trs_body:
             tds = Chrome.find_elements_by_tag_name(tr, "td")
-            index, key = 0, None
+            key = None
 
-            for td in tds:
+            if len(tds) <= 2:
+                continue
+
+            for index, td in enumerate(tds):
+                if index >= len(titles):
+                    continue
+
+                if 'hidden' in td.attrs:
+                    continue
+
                 text_th = titles[index]
-                index += 1
 
                 # pulando itens que não possuem texto. Ex: botões na tabela
                 if td.text == "" or td.text is None:
@@ -83,7 +91,7 @@ class BaseSeleniumDriver(BaseDriver):
                     if self.collection_name == 'azure':
                         items = str(td.text).split('/')
                         value = items[0]
-                        if len(items) > 1:
+                        if len(items) > 1 and str(td.text) != 'N/A':
                             Log.debug('Removendo parte do valor de ' + td.text + ' valor agora sera: ' + value)
 
                     self.columns[key][text_th] = value
