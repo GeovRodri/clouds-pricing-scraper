@@ -1,75 +1,23 @@
 import asyncio
+from time import sleep
 
-from commons.BaseDriver import BaseDriver
+from commons.BaseSeleniumDriver import BaseSeleniumDriver
 from models.Chrome import Chrome
 
 
-class AlibabaDriver(BaseDriver):
+class AlibabaDriver(BaseSeleniumDriver):
 
     def __init__(self):
-        self.url = "https://www.alibabacloud.com/product/ecs"
+        self.url = "https://www.alibabacloud.com/product/ecs-pricing-list/en"
         self.collection_name = 'alibaba'
         super().__init__()
 
-    def search(self):
-        """ Inicializando selenium """
-        Chrome.get_url(self.url)
-
-        localizations = self.get_localizations()
-        xpath_products = "//*[contains(@class, 'reseller-band-color')]//div[contains(@class, 'box')]"
-        cards = Chrome.find_elements_by_xpath(xpath_products)
-        products_os = self.get_os()
-
-        for product_os in products_os:
-            self.select_option(product_os)
-
-            for localization in localizations:
-                self.select_option(localization)
-                index_card = 1
-
-                for card in cards:
-                    card_xpath = xpath_products + '[{}]'.format(index_card)
-                    price = Chrome.find_element_by_xpath(card_xpath + "//*[contains(@class, 'price')]").text
-                    items = Chrome.find_elements_by_xpath(card_xpath + "//li")
-                    key = "{}_{}".format(index_card, product_os)
-
-                    if key not in self.columns:
-                        self.columns[key] = {}
-
-                    for item in items:
-                        """ Pegando o titulo e a valor, como os dois estão juntos estou considerando o que está em negrito
-                         é o valor e o restante o titulo"""
-                        value = Chrome.find_element_by_tag_name(item, 'b').text
-                        title = str(item.text).replace(value, '')
-                        self.columns[key][title] = value
-
-                    """ Pegando os valores dos produtos"""
-                    if 'pricing' not in self.columns[key]:
-                        self.columns[key]['pricing'] = {}
-
-                    if localization not in self.columns[key]['pricing']:
-                        self.columns[key]['pricing'][localization] = {}
-
-                    self.columns[key]['pricing'][localization]['price'] = price
-                    index_card += 1
-
     def select_option(self, localization):
-        asyncio.get_event_loop().run_until_complete(Chrome.click_using_text_and_tag(localization, 'a'))
+        asyncio.get_event_loop().run_until_complete(Chrome.click_using_text_and_tag(localization, 'button'))
+        sleep(2)
 
     def get_localizations(self):
-        options = []
-        selects = Chrome.find_elements_by_xpath("//*[contains(@class,'get-regions')]//dd")
-
-        for element in selects:
-            options.append(element.text)
-
-        return options
-
-    def get_os(self):
-        options = []
-        selects = Chrome.find_elements_by_xpath("//*[contains(@class,'get-os')]//dd")
-
-        for element in selects:
-            options.append(element.text)
-
-        return options
+        asyncio.get_event_loop().run_until_complete(Chrome.click_using_text_and_tag('Mid East And India', 'div'))
+        asyncio.get_event_loop().run_until_complete(Chrome.click_using_text_and_tag('Europe And America', 'div'))
+        selects = asyncio.get_event_loop().run_until_complete(Chrome.driver.html.page.evaluate('REGION_DATA'))
+        return [_['label'] for _ in selects.values()]

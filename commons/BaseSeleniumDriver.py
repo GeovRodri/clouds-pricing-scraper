@@ -32,7 +32,7 @@ class BaseSeleniumDriver(BaseDriver):
 
     def process_table(self, table, titles, localization):
         thead = Chrome.find_element_by_tag_name(table, "thead")
-        tbody = Chrome.find_element_by_tag_name(table, "tbody")
+        all_tbody = Chrome.find_elements_by_tag_name(table, "tbody")
 
         """ Buscando as colunas. Tem sites que utilizam o td no lugar do th """
         ths = Chrome.find_elements_by_tag_name(thead, "th")
@@ -43,58 +43,59 @@ class BaseSeleniumDriver(BaseDriver):
             if th.text not in titles:
                 titles.append(th.text)
 
-        trs_body = Chrome.find_elements_by_tag_name(tbody, "tr")
-        for tr in trs_body:
-            tds = Chrome.find_elements_by_tag_name(tr, "td")
-            key = None
+        for tbody in all_tbody:
+            trs_body = Chrome.find_elements_by_tag_name(tbody, "tr")
+            for tr in trs_body:
+                tds = Chrome.find_elements_by_tag_name(tr, "td")
+                key = None
 
-            if len(tds) <= 2:
-                continue
-
-            for index, td in enumerate(tds):
-                if index >= len(titles):
+                if len(tds) <= 2:
                     continue
 
-                if 'hidden' in td.attrs:
-                    continue
+                for index, td in enumerate(tds):
+                    if index >= len(titles):
+                        continue
 
-                text_th = titles[index]
+                    if 'hidden' in td.attrs:
+                        continue
 
-                # pulando itens que não possuem texto. Ex: botões na tabela
-                if td.text == "" or td.text is None:
-                    continue
+                    text_th = titles[index]
 
-                if key is None:
-                    key = td.text
+                    # pulando itens que não possuem texto. Ex: botões na tabela
+                    if td.text == "" or td.text is None:
+                        continue
 
-                if key not in self.columns:
-                    self.columns[key] = {}
+                    if key is None:
+                        key = td.text
 
-                """ Se for um valor agrupar em princing, se não só adicionar como uma coluna """
-                if str(td.text).startswith('$'):
-                    if 'pricing' not in self.columns[key]:
-                        self.columns[key]['pricing'] = {}
+                    if key not in self.columns:
+                        self.columns[key] = {}
 
-                    if localization not in self.columns[key]['pricing']:
-                        self.columns[key]['pricing'][localization] = {}
+                    """ Se for um valor agrupar em princing, se não só adicionar como uma coluna """
+                    if str(td.text).startswith('$'):
+                        if 'pricing' not in self.columns[key]:
+                            self.columns[key]['pricing'] = {}
 
-                    self.columns[key]['pricing'][localization][text_th] = td.text
-                else:
-                    if text_th not in self.columns[key]:
-                        self.columns[key][text_th] = {}
+                        if localization not in self.columns[key]['pricing']:
+                            self.columns[key]['pricing'][localization] = {}
 
-                    value = td.text
+                        self.columns[key]['pricing'][localization][text_th] = td.text
+                    else:
+                        if text_th not in self.columns[key]:
+                            self.columns[key][text_th] = {}
 
-                    # Removendo parte dos valores que contém / para maquinas da azure
-                    # Algumas máquina vem com um valor de cpu diferente, como por exemplo 2 / 4,
-                    # nesses casos vamos considerar apenas o 2
-                    if self.collection_name == 'azure':
-                        items = str(td.text).split('/')
-                        value = items[0]
-                        if len(items) > 1 and str(td.text) != 'N/A':
-                            Log.debug('Removendo parte do valor de ' + td.text + ' valor agora sera: ' + value)
+                        value = td.text
 
-                    self.columns[key][text_th] = value
+                        # Removendo parte dos valores que contém / para maquinas da azure
+                        # Algumas máquina vem com um valor de cpu diferente, como por exemplo 2 / 4,
+                        # nesses casos vamos considerar apenas o 2
+                        if self.collection_name == 'azure':
+                            items = str(td.text).split('/')
+                            value = items[0]
+                            if len(items) > 1 and str(td.text) != 'N/A':
+                                Log.debug('Removendo parte do valor de ' + td.text + ' valor agora sera: ' + value)
+
+                        self.columns[key][text_th] = value
 
     def after_load_url(self):
         pass
