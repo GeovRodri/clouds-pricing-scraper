@@ -21,8 +21,9 @@ class AwsDriver(BaseDriver):
         location = None
         instance_type = None
         sku = None
-        operating_system = None
         attributes = {}
+        shared = True
+        compute = True
 
         for prefix, event, value in pages:
             if self.is_blank(prefix) is True or self.is_blank(value) is True:
@@ -39,20 +40,34 @@ class AwsDriver(BaseDriver):
                     attributes['pricing'] = {}
                 elif 'operatingSystem' == last_key:
                     operating_system = value
+                    if operating_system != 'Linux':
+                        compute = False
+                        if sku in sku_location:
+                            del sku_location[sku]
+                elif 'tenancy' == last_key and value != 'Shared':
+                    shared = False
+                    if sku in sku_location:
+                        del sku_location[sku]
+                elif 'productFamily' == last_key and value == 'Elastic Graphics':
+                    compute = False
+                    if sku in sku_location:
+                        del sku_location[sku]
                 elif 'sku' == last_key:
                     """ Ao trocar o sku reiniciar todas as variaveis e inserir os atributos ao dicionario """
-                    if sku is not None and sku != value and instance_type is not None and operating_system == 'Linux':
+                    if sku is not None and sku != value and instance_type is not None and shared and compute:
                         self.columns[instance_type] = attributes
-                        location = None
-                        instance_type = None
-                    
+
+                    location = None
+                    instance_type = None
                     attributes = {}
                     sku = value
+                    shared = True
+                    compute = True
 
-                if sku is not None and location is not None and instance_type is not None:
+                if sku is not None and location is not None and instance_type is not None and shared and compute:
                     sku_location[sku] = {'location': location, 'instance_type': instance_type}
 
-                if 'attributes' in prefix and 'location' not in prefix and 'instanceType' not in prefix:
+                if 'attributes' in prefix and 'location' not in prefix and 'instanceType' not in prefix and shared and compute:
                     attributes[last_key] = value
 
             elif 'terms.OnDemand' in prefix and event == 'string':
