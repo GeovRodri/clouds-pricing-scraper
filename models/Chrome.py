@@ -27,7 +27,7 @@ class Chrome:
             Chrome.lock.acquire()
             user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
             Chrome.driver: HTMLResponse = Chrome.session.get(url, headers={'User-Agent': user_agent})
-            Chrome.driver.html.render(keep_page=True)
+            Chrome.driver.html.render(keep_page=True, timeout=10000)
         finally:
             Chrome.lock.release()
             if callback is not None:
